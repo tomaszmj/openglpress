@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <shprogram.h>
 #include <GLFW/glfw3.h>
-#include <SOIL.h>
+#include <SOIL/SOIL.h>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -30,7 +30,7 @@ void load_texture(const char *file, GLuint *textures, int id)
     int width, height;
     unsigned char* image = SOIL_load_image(file, &width, &height, 0, SOIL_LOAD_RGB);
     if(image == nullptr)
-        throw exception("Failed to load texture file");
+        throw runtime_error("Failed to load texture file");
     glActiveTexture(GL_TEXTURE0 + id);
     glBindTexture(GL_TEXTURE_2D, textures[id]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
@@ -55,13 +55,13 @@ int main()
     {
         GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "GKOM - OpenGL 04", nullptr, nullptr);
         if(window == nullptr)
-            throw exception("GLFW window not created");
+            throw runtime_error("GLFW window not created");
         glfwMakeContextCurrent(window);
         glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
         glewExperimental = GL_TRUE;
         if(glewInit() != GLEW_OK)
-            throw exception("GLEW Initialization failed");
+            throw runtime_error("GLEW Initialization failed");
 
         glViewport(0, 0, WIDTH, HEIGHT);
 
@@ -194,7 +194,7 @@ int main()
         glDeleteBuffers(1, &VBO);
         glDeleteBuffers(1, &EBO);
     }
-    catch(exception ex)
+    catch(exception &ex)
     {
         cout << ex.what() << endl;
         getchar();

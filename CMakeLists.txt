@@ -1,8 +1,9 @@
 cmake_minimum_required (VERSION 3.0)
-project(GL)
+project(gkom)
 
-find_package(OpenGL REQUIRED)
-add_definitions(${OPENGL_DEFINITIONS})
+#find_package(OpenGL REQUIRED)
+#add_definitions(${OPENGL_DEFINITIONS})
+include_directories("include")
 FILE(GLOB SRC_LIST "src/*.cpp")
 FILE(GLOB HEADER_LIST "include/*.h")
 
@@ -12,11 +13,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GLEW_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/win32/include/GL )
     set(SOIL_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/win32/include/ )
     set(GLM_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/win32/include/glm )
-
     set(GLFW_LIBRARY ${CMAKE_SOURCE_DIR}/win32/lib/glfw3 )
     set(GLEW_LIBRARY ${CMAKE_SOURCE_DIR}/win32/lib/glew32s )
     set(SOIL_LIBRARY ${CMAKE_SOURCE_DIR}/win32/lib/SOIL )
-
     include_directories(
         ${GLFW_INCLUDE_PATH}
         ${GLEW_INCLUDE_PATH}
@@ -24,19 +23,27 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${SOIL_INCLUDE_PATH}
         "include"
     )
-
     set(LIBS ${OPENGL_LIBRARY} ${GLEW_LIBRARY} ${GLFW_LIBRARY} ${SOIL_LIBRARY} legacy_stdio_definitions)
     set (CMAKE_C_FLAGS "-m32")
     set (CMAKE_CXX_FLAGS "-m32")
+
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     message("Running Linux build configuration.")
-    find_package(GLFW3 REQUIRED)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
+    message(STATUS "Found GLFW3 in ${GLFW3_INCLUDE_DIR}")
     find_package(SOIL REQUIRED)
+    message(STATUS "Found SOIL in ${SOIL_INCLUDE_DIR}")
     find_package(GLEW REQUIRED)
+    message(STATUS "Found GLEW in ${GLEW_INCLUDE_DIR}")
     find_package(GLM REQUIRED)
-    include_directories("include")
+    message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
+
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Werror")
+    find_package(OpenGL REQUIRED)
+    add_definitions(${OPENGL_DEFINITIONS})
     find_package(X11 REQUIRED)
     set(LIBS ${GLFW3_LIBRARY} X11 Xrandr Xinerama Xi Xxf86vm Xcursor GL dl pthread GLEW SOIL)
+
 else(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     message("Unsupported OS, try hand-editing Linux configuraion.")
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")    
