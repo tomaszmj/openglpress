@@ -73,7 +73,7 @@ int main()
         cout << "Max texture coords allowed: " << nrAttributes << std::endl;
 
         // Build, compile and link shader program
-        ShaderProgram theProgram("gl_04.vert", "gl_04.frag");
+        ShaderProgram theProgram("resources/gl_04.vert", "resources/gl_04.frag");
 
         // Set up vertex data 
         GLfloat vertices[] =
@@ -143,8 +143,8 @@ int main()
 
         GLuint textures[2];
         glGenTextures(2, textures);
-        load_texture("iipw.png", textures, 0);
-        load_texture("weiti.png", textures, 1);
+        load_texture("resources/iipw.png", textures, 0);
+        load_texture("resources/weiti.png", textures, 1);
 
         glEnable(GL_DEPTH_TEST);
 
