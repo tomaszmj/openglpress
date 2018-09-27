@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 project(gkom)
 
+set(CMAKE_CXX_STANDARD 11)
 find_package(OpenGL REQUIRED)
 add_definitions(${OPENGL_DEFINITIONS})
 include_directories("include")
@@ -39,7 +40,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     find_package(GLM REQUIRED)
     message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
 
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Werror")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Werror -DGLEW_STATIC")
     find_package(X11 REQUIRED)
     set(LIBS ${GLFW3_LIBRARY} X11 Xrandr Xinerama Xi Xxf86vm Xcursor GL dl pthread GLEW SOIL)
 

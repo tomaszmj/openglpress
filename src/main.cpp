@@ -1,4 +1,3 @@
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <shprogram.h>
 #include <GLFW/glfw3.h>
@@ -7,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <texture.h>
 using namespace std;
 
 GLuint WIDTH = 800, HEIGHT = 600;
@@ -23,21 +23,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
     WIDTH = width;
     HEIGHT = height;
-}
-
-void load_texture(const char *file, GLuint *textures, int id)
-{
-    int width, height;
-    unsigned char* image = SOIL_load_image(file, &width, &height, 0, SOIL_LOAD_RGB);
-    if(image == nullptr)
-        throw runtime_error("Failed to load texture file");
-    glActiveTexture(GL_TEXTURE0 + id);
-    glBindTexture(GL_TEXTURE_2D, textures[id]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    // freeing unnecessary texture stuff
-    SOIL_free_image_data(image);
-    glBindTexture(GL_TEXTURE_2D, id);
 }
 
 int main()
@@ -141,10 +126,10 @@ int main()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        GLuint textures[2];
-        glGenTextures(2, textures);
-        load_texture("resources/textures/iipw.png", textures, 0);
-        load_texture("resources/textures/weiti.png", textures, 1);
+        Textures textures({
+            TextureInitializer("resources/textures/iipw.png", "Texture0"),
+            TextureInitializer("resources/textures/weiti.png", "Texture1")
+        });
 
         glEnable(GL_DEPTH_TEST);
 
@@ -159,7 +144,7 @@ int main()
         while(!glfwWindowShouldClose(window))
         {    
             projection = glm::perspective(glm::radians(40.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-            view = glm::rotate(view, glm::radians(0.1f), glm::vec3(0, 1, 0));
+            // view = glm::rotate(view, glm::radians(0.1f), glm::vec3(0, 1, 0));
             transform = projection * view * model;
 
             // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
@@ -170,13 +155,7 @@ int main()
             glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            // Bind Textures using texture units
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, textures[0]);
-            glUniform1i(glGetUniformLocation(theProgram.get_programID(), "Texture0"), 0);
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, textures[1]);
-            glUniform1i(glGetUniformLocation(theProgram.get_programID(), "Texture1"), 1);
+            textures.bindAll(theProgram.get_programID());
 
             GLuint transformLoc = glGetUniformLocation(theProgram.get_programID(), "transform");
             glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
