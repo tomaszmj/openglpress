@@ -1,4 +1,4 @@
-#include <texture.h>
+#include <textures.h>
 #include <stdexcept>
 #include <cassert>
 #include <SOIL/SOIL.h>
@@ -21,7 +21,7 @@ int Textures::numberOfTextures() const
 void Textures::bindByIndex(GLuint programId, int index)
 {
     assert(index < numberOfTextures());
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0 + index);
     glBindTexture(GL_TEXTURE_2D, textureIds[index]);
     glUniform1i(glGetUniformLocation(programId, textureNames[index].c_str()), index);
 }
@@ -43,7 +43,6 @@ void Textures::loadTexture(const TextureInitializer initializer)
     glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, id);
 }
-
 
 Textures::Image::Image(const char *filename)
     : data(nullptr)
