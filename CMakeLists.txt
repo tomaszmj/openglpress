@@ -40,7 +40,9 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     find_package(GLM REQUIRED)
     message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
 
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Werror -DGLEW_STATIC")
+    set(DEFAULT_FLAGS "-Wall -pedantic -Wextra -DGLEW_STATIC")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DEFAULT_FLAGS} -O0 -g")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${DEFAULT_FLAGS} -Werror -O3 -DNDEBUG")
     find_package(X11 REQUIRED)
     set(LIBS ${GLFW3_LIBRARY} X11 Xrandr Xinerama Xi Xxf86vm Xcursor GL dl pthread GLEW SOIL)
 
