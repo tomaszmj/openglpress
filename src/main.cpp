@@ -17,7 +17,37 @@ void process_input(GLFWwindow* window, Camera &camera)
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-        camera.move(0.001f, Camera::UP);
+    {
+        if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            camera.rotate(1.0f, Camera::ROTATE_UP);
+        else
+            camera.move(0.01f, Camera::UP);
+    }
+    if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            camera.rotate(1.0f, Camera::ROTATE_DOWN);
+        else
+            camera.move(0.01f, Camera::DOWN);
+    }
+    if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            camera.rotate(1.0f, Camera::ROTATE_RIGHT);
+        else
+            camera.move(0.01f, Camera::RIGHT);
+    }
+    if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            camera.rotate(1.0f, Camera::ROTATE_LEFT);
+        else
+            camera.move(0.01f, Camera::LEFT);
+    }
+    if(glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
+        camera.move(0.01f, Camera::BACKWARD);
+    if(glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
+        camera.move(0.01f, Camera::FORWARD);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -156,12 +186,10 @@ int main()
 
         glEnable(GL_DEPTH_TEST);
 
-        glm::mat4 model(1), view, projection, transform;
+        glm::mat4 model(1), projection, transform;
         // model = glm::translate(model, glm::vec3(-0.5f, -0.5f, -0.5f));
         glm::vec3 eye(0.9f, 0.8f, 3.0f);
         glm::vec3 center(0.0f);
-        glm::vec3 up(0.0f, 1.0f, 0.0f);
-        view = glm::lookAt(eye, center, up);
         Camera camera(eye, center);
         
         // main event loop
