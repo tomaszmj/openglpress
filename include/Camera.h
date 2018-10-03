@@ -19,11 +19,13 @@ private:
     glm::vec2 rotationVelocity;
     const glm::vec3 up;
     glm::vec3 sightDirection;
+    glm::vec3 position;
     glm::mat4 viewMatrix;
 
     void moveRightOrLeft(glm::f32 coefficient);
     void moveBackwardOrForward(glm::f32 coefficient);
     void moveDownOrUp(glm::f32 coefficient);
+    void translate(glm::vec3 translation);
     void rotateUpOrDown(glm::f32 coefficient);
     void rotateRightOrLeft(glm::f32 coefficient);
 };

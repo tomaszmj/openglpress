@@ -3,7 +3,8 @@
 
 Camera::Camera(glm::vec3 eye, glm::vec3 lookingAt, glm::vec3 move_velocity, glm::vec2 rotation_velocity)
     : moveVelocity(move_velocity), rotationVelocity(rotation_velocity), up(0.0f, 1.0f, 0.0f),
-      sightDirection(glm::normalize(lookingAt - eye)), viewMatrix(glm::lookAt(eye, lookingAt, up))
+      sightDirection(glm::normalize(lookingAt - eye)), viewMatrix(glm::lookAt(eye, lookingAt, up)),
+      position(eye)
 {
 }
 
@@ -39,20 +40,28 @@ const glm::mat4 &Camera::getViewMatrix() const
 void Camera::moveRightOrLeft(glm::f32 coefficient)
 {
     glm::vec3 translation = coefficient * moveVelocity.x * glm::cross(up, sightDirection);
-    viewMatrix = glm::translate(viewMatrix, translation);
+    translate(translation);
 }
 
 void Camera::moveBackwardOrForward(glm::f32 coefficient)
 {
     glm::vec3 translation = coefficient * moveVelocity.z * sightDirection;
-    viewMatrix = glm::translate(viewMatrix, translation);
+    translate(translation);
 }
 
 void Camera::moveDownOrUp(glm::f32 coefficient)
 {
     glm::vec3 translation = coefficient * moveVelocity.y * glm::cross(sightDirection, glm::cross(up, sightDirection));
-    viewMatrix = glm::translate(viewMatrix, translation);
+    translate(translation);
 }
+
+void Camera::translate(glm::vec3 translation)
+{
+    position += translation;
+    viewMatrix = glm::translate(viewMatrix, translation);
+    viewMatrix = glm::lookAt(position, position + sightDirection, up);
+}
+
 #include <iostream>
 void Camera::rotateUpOrDown(glm::f32 coefficient)
 {
@@ -66,6 +75,7 @@ void Camera::rotateUpOrDown(glm::f32 coefficient)
         return; // ignore result - do not change camera orientation
     }
     sightDirection = new_sight_direction;
+    // viewMatrix = glm::lookAt(
     viewMatrix = rotation_matrix * viewMatrix;
 }
 
