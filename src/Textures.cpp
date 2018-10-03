@@ -1,4 +1,4 @@
-#include <textures.h>
+#include <Textures.h>
 #include <stdexcept>
 #include <cassert>
 #include <SOIL/SOIL.h>

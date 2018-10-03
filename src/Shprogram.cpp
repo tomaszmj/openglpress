@@ -6,7 +6,7 @@
 using namespace std;
 
 #include <GL/glew.h>
-#include <shprogram.h>
+#include <Shprogram.h>
 
 string read_shader_code(const GLchar* shaderPath)
 {

@@ -1,12 +1,12 @@
 #include <GL/glew.h>
-#include <shprogram.h>
+#include <Shprogram.h>
 #include <GLFW/glfw3.h>
 #include <SOIL/SOIL.h>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <textures.h>
+#include <Textures.h>
 using namespace std;
 
 GLuint WIDTH = 800, HEIGHT = 600;
