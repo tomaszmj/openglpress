@@ -7,14 +7,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Textures.h>
+#include <Camera.h>
 using namespace std;
 
 GLuint WIDTH = 800, HEIGHT = 600;
 
-void process_input(GLFWwindow* window)
+void process_input(GLFWwindow* window, Camera &camera)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        camera.move(0.001f, Camera::UP);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -159,17 +162,18 @@ int main()
         glm::vec3 center(0.0f);
         glm::vec3 up(0.0f, 1.0f, 0.0f);
         view = glm::lookAt(eye, center, up);
+        Camera camera(eye, center);
         
         // main event loop
         while(!glfwWindowShouldClose(window))
         {    
             projection = glm::perspective(glm::radians(40.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-            view = glm::rotate(view, glm::radians(0.1f), glm::vec3(0, 1, 0));
-            transform = projection * view * model;
+            // view = glm::rotate(view, glm::radians(0.1f), glm::vec3(0, 1, 0));
+            transform = projection * camera.getViewMatrix() * model;
 
             // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
             glfwPollEvents();
-            process_input(window);
+            process_input(window, camera);
 
             // Clear the colorbuffer
             glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
