@@ -7,20 +7,19 @@ public:
     enum MoveDirection {RIGHT, LEFT, UP, DOWN, BACKWARD, FORWARD};
     enum RotationDirection {ROTATE_UP, ROTATE_DOWN, ROTATE_RIGHT, ROTATE_LEFT};
 
-    Camera(glm::vec3 eye, glm::vec3 lookingAt,
-           glm::vec3 move_velocity = glm::vec3(1.0f, 1.0f, 1.0f),
-           glm::vec2 rotation_velocity = glm::vec2(0.01f, 0.01f));
+    Camera(glm::vec3 eye, glm::vec3 lookingAt);
     const glm::mat4 &getViewMatrix() const;
     void move(glm::f32 coefficient, MoveDirection direction);
     void rotate(glm::f32 coefficient, RotationDirection direction);
 
 private:
-    glm::vec3 moveVelocity;
-    glm::vec2 rotationVelocity;
     const glm::vec3 up;
-    glm::vec3 sightDirection;
+    glm::vec3 cameraZ;
     glm::vec3 position;
     glm::mat4 viewMatrix;
+
+    glm::vec3 cameraX() const;
+    glm::vec3 cameraY() const;
 
     void moveRightOrLeft(glm::f32 coefficient);
     void moveBackwardOrForward(glm::f32 coefficient);
