@@ -197,7 +197,6 @@ int main()
         {    
             projection = glm::perspective(glm::radians(40.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
             // view = glm::rotate(view, glm::radians(0.1f), glm::vec3(0, 1, 0));
-            transform = projection * camera.getViewMatrix() * model;
 
             // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
             glfwPollEvents();
@@ -209,13 +208,17 @@ int main()
 
             textures.bindAll(theProgram.get_programID());
 
-            GLuint transformLoc = glGetUniformLocation(theProgram.get_programID(), "transform");
-            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
             theProgram.Use();
 
             glBindVertexArray(VAO);
-            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+            for(int i = 0; i < 4; ++i)
+            {
+                glm::mat4 changed_model = glm::translate(model, glm::vec3(i*1.0f, i*1.5f, i*2.0f));
+                transform = projection * camera.getViewMatrix() * changed_model;
+                GLuint transformLoc = glGetUniformLocation(theProgram.get_programID(), "transform");
+                glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+            }
             glBindVertexArray(0);
 
             // Swap the screen buffers
