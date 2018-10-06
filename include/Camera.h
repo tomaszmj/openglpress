@@ -9,8 +9,8 @@ public:
 
     Camera(glm::vec3 eye, glm::vec3 lookingAt);
     const glm::mat4 &getViewMatrix() const;
-    void move(glm::f32 coefficient, MoveDirection direction);
-    void rotate(glm::f32 coefficient, RotationDirection direction);
+    void move(glm::f32 distance, MoveDirection direction);
+    void rotate(glm::f32 angle, RotationDirection direction);
 
 private:
     const glm::vec3 up;
@@ -22,7 +22,7 @@ private:
     glm::vec3 cameraY() const;
 
     void translate(glm::vec3 translation);
-    void rotateUpOrDown(glm::f32 coefficient);
-    void rotateRightOrLeft(glm::f32 coefficient);
+    void rotateUpOrDown(glm::f32 angle);
+    void rotateRightOrLeft(glm::f32 angle);
     static bool isCameraOrientationCorrect(const glm::vec3 &up, const glm::vec3 &camera_x, const glm::vec3 &camera_z);
 };

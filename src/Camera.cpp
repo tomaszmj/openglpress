@@ -21,27 +21,27 @@ Camera::Camera(glm::vec3 eye, glm::vec3 lookingAt)
 {
 }
 
-void Camera::move(glm::f32 coefficient, MoveDirection direction)
+void Camera::move(glm::f32 distance, MoveDirection direction)
 {
     switch(direction)
     {
-        case RIGHT: translate(coefficient * cameraX()); break;
-        case LEFT: translate(-coefficient * cameraX()); break;
-        case UP: translate(coefficient * cameraY()); break;
-        case DOWN: translate(-coefficient * cameraY()); break;
-        case BACKWARD: translate(coefficient * cameraZ); break;
-        case FORWARD: translate(-coefficient * cameraZ); break;
+        case RIGHT: translate(distance * cameraX()); break;
+        case LEFT: translate(-distance * cameraX()); break;
+        case UP: translate(distance * cameraY()); break;
+        case DOWN: translate(-distance * cameraY()); break;
+        case BACKWARD: translate(distance * cameraZ); break;
+        case FORWARD: translate(-distance * cameraZ); break;
     }
 }
 
-void Camera::rotate(glm::f32 coefficient, RotationDirection direction)
+void Camera::rotate(glm::f32 angle, RotationDirection direction)
 {
     switch(direction)
     {
-        case ROTATE_UP: rotateUpOrDown(coefficient); break;
-        case ROTATE_DOWN: rotateUpOrDown(-coefficient); break;
-        case ROTATE_RIGHT: rotateRightOrLeft(-coefficient); break;
-        case ROTATE_LEFT: rotateRightOrLeft(coefficient); break;
+        case ROTATE_UP: rotateUpOrDown(angle); break;
+        case ROTATE_DOWN: rotateUpOrDown(-angle); break;
+        case ROTATE_RIGHT: rotateRightOrLeft(-angle); break;
+        case ROTATE_LEFT: rotateRightOrLeft(angle); break;
     }
 }
 
