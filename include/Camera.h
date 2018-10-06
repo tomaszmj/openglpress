@@ -21,10 +21,8 @@ private:
     glm::vec3 cameraX() const;
     glm::vec3 cameraY() const;
 
-    void moveRightOrLeft(glm::f32 coefficient);
-    void moveBackwardOrForward(glm::f32 coefficient);
-    void moveDownOrUp(glm::f32 coefficient);
     void translate(glm::vec3 translation);
     void rotateUpOrDown(glm::f32 coefficient);
     void rotateRightOrLeft(glm::f32 coefficient);
+    static bool isCameraOrientationCorrect(const glm::vec3 &up, const glm::vec3 &camera_x, const glm::vec3 &camera_z);
 };

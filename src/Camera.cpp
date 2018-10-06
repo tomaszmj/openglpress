@@ -4,6 +4,16 @@
 #include <iostream>
 #include <iomanip>
 
+namespace
+{
+glm::vec3 rotate_vector(const glm::vec3 &vector, glm::f32 angle, const glm::vec3 &axis)
+{
+    glm::mat4 rotation_matrix(1);
+    rotation_matrix = glm::rotate(rotation_matrix, angle, axis);
+    return glm::vec3(rotation_matrix * glm::vec4(vector, 1.0));
+}
+}
+
 Camera::Camera(glm::vec3 eye, glm::vec3 lookingAt)
     : up(0.0f, 1.0f, 0.0f), cameraZ(glm::normalize(eye - lookingAt)),
       position(eye), viewMatrix(glm::lookAt(eye, lookingAt, up))
@@ -64,19 +74,16 @@ void Camera::translate(glm::vec3 translation)
 {
     position += translation;
     viewMatrix = glm::translate(viewMatrix, -translation);
-    // std::cout << "position: " << position[0] << " " << position[1] << " " << position[2] << "\n";
-    // printMatrix(viewMatrix);
 }
 
 void Camera::rotateUpOrDown(glm::f32 coefficient)
 {
-    glm::vec3 old_camera_x = cameraX();
-    glm::mat4 rotation_matrix(1);
-    rotation_matrix = glm::rotate(rotation_matrix, coefficient, old_camera_x);
-    glm::vec3 new_camera_z = glm::vec3(rotation_matrix * glm::vec4(cameraZ, 1.0));
-    if(glm::dot(old_camera_x, glm::cross(up, new_camera_z)) <= 0.0f)
+    glm::vec3 new_camera_z = rotate_vector(cameraZ, coefficient, cameraX());
+    if(!isCameraOrientationCorrect(up, cameraX(), new_camera_z))
     {
+        #ifndef NDEBUG
         std::cout << "cannot rotate more up/down\n";
+        #endif
         return; // ignore result - do not change camera orientation
     }
     cameraZ = new_camera_z;
@@ -85,8 +92,11 @@ void Camera::rotateUpOrDown(glm::f32 coefficient)
 
 void Camera::rotateRightOrLeft(glm::f32 coefficient)
 {
-    glm::mat4 rotation_matrix(1);
-    rotation_matrix = glm::rotate(rotation_matrix, coefficient, cameraY());
-    cameraZ = glm::vec3(rotation_matrix * glm::vec4(cameraZ, 1.0));
+    cameraZ = rotate_vector(cameraZ, coefficient, cameraY());
     viewMatrix = glm::lookAt(position, position - cameraZ, up);
+}
+
+bool Camera::isCameraOrientationCorrect(const glm::vec3 &up, const glm::vec3 &camera_x, const glm::vec3 &camera_z)
+{
+    return glm::dot(camera_x, glm::cross(up, camera_z)) >= 0.0f;
 }
