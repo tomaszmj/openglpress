@@ -1,8 +1,9 @@
 #include "Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_access.hpp>
+#ifndef NDEBUG
 #include <iostream>
-#include <iomanip>
+#endif
 
 namespace
 {
@@ -57,17 +58,6 @@ glm::vec3 Camera::cameraX() const
 glm::vec3 Camera::cameraY() const
 {
     return glm::cross(cameraZ, cameraX());
-}
-
-void printMatrix(const glm::mat4 &matrix)
-{
-    for(int j = 0; j < 4; ++j)
-    {
-        for(int i = 0; i < 4; ++i)
-            std::cout << std::setw(16) << matrix[i][j];
-        std::cout << "\n";
-    }
-    std::cout << "\n";
 }
 
 void Camera::translate(glm::vec3 translation)
