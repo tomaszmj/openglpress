@@ -19,35 +19,35 @@ void process_input(GLFWwindow* window, Camera &camera)
     if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
         if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            camera.rotate(1.0f, Camera::ROTATE_UP);
+            camera.rotate(0.01f, Camera::ROTATE_UP);
         else
             camera.move(0.01f, Camera::UP);
     }
     if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
         if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            camera.rotate(1.0f, Camera::ROTATE_DOWN);
+            camera.rotate(0.01f, Camera::ROTATE_DOWN);
         else
             camera.move(0.01f, Camera::DOWN);
     }
     if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
         if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            camera.rotate(1.0f, Camera::ROTATE_RIGHT);
+            camera.rotate(0.01f, Camera::ROTATE_RIGHT);
         else
             camera.move(0.01f, Camera::RIGHT);
     }
     if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
         if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            camera.rotate(1.0f, Camera::ROTATE_LEFT);
+            camera.rotate(0.01f, Camera::ROTATE_LEFT);
         else
             camera.move(0.01f, Camera::LEFT);
     }
     if(glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
-        camera.move(0.01f, Camera::BACKWARD);
+        camera.move(0.1f, Camera::BACKWARD);
     if(glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
-        camera.move(0.01f, Camera::FORWARD);
+        camera.move(0.1f, Camera::FORWARD);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
