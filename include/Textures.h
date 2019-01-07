@@ -2,6 +2,7 @@
 #include <vector>
 #include <initializer_list>
 #include <string>
+#define GLEW_STATIC
 #include <GL/glew.h>
 
 struct TextureInitializer
