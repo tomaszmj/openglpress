@@ -3,11 +3,13 @@
 #include <GLFW/glfw3.h>
 #include <SOIL/SOIL.h>
 #include <iostream>
+#include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Textures.h>
 #include <Camera.h>
+#include <TexturedCubeModel.h>
 using namespace std;
 
 GLuint WIDTH = 800, HEIGHT = 600;
@@ -142,6 +144,10 @@ int main()
             20, 22, 23,
         };
 
+        std::unique_ptr<AbstractModelItem> item(dynamic_cast<AbstractModelItem*>(new TexturedCubeModel()));
+        item->fillInVBO(vertices); // temporary - testing item
+        item->fillInEBO(indices); // temporary - testing item
+
         GLuint VBO, EBO, VAO;
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
@@ -151,10 +157,10 @@ int main()
         glBindVertexArray(VAO);
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, item->getVBOSize(), vertices, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, item->getEBOSize(), indices, GL_STATIC_DRAW);
 
         // vertex geometry data
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
