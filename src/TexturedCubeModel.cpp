@@ -11,17 +11,17 @@ TexturedCubeModel::TexturedCubeModel()
 
 TexturedCubeModel::~TexturedCubeModel() {}
 
-GLsizeiptr TexturedCubeModel::getVBOSize()
+GLsizeiptr TexturedCubeModel::getVBOSize() const
 {
     return 24*8*sizeof(GLfloat);
 }
 
-GLsizeiptr TexturedCubeModel::getEBOSize()
+GLsizeiptr TexturedCubeModel::getEBOSize() const
 {
     return 36*sizeof(GLfloat);
 }
 
-void TexturedCubeModel::fillInVBO(void *buffer)
+void TexturedCubeModel::fillInVBO(void *buffer) const
 {
     static const GLfloat vertices[] = {
         -0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
@@ -57,7 +57,7 @@ void TexturedCubeModel::fillInVBO(void *buffer)
     std::memcpy(buffer, vertices, sizeof(vertices));
 }
 
-void TexturedCubeModel::fillInEBO(void *buffer)
+void TexturedCubeModel::fillInEBO(void *buffer) const
 {
     static const GLuint indices[] = {
         0, 1, 2,
@@ -76,7 +76,7 @@ void TexturedCubeModel::fillInEBO(void *buffer)
     std::memcpy(buffer, indices, sizeof(indices));
 }
 
-const std::vector<AbstractModelItem::GlVertexAttribInput> &TexturedCubeModel::getVertexAttributes()
+const std::vector<AbstractModelItem::GlVertexAttribInput> &TexturedCubeModel::getVertexAttributes() const
 {
     return vertexAttributes;
 }

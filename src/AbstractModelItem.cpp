@@ -2,7 +2,7 @@
 
 AbstractModelItem::~AbstractModelItem() {}
 
-GLsizei AbstractModelItem::getVertexAttributesStride()
+GLsizei AbstractModelItem::getVertexAttributesStride() const
 {
     const auto attributes = getVertexAttributes();
     GLsizei retval = 0;

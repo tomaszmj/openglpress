@@ -13,10 +13,10 @@ public:
     };
 
     virtual ~AbstractModelItem();
-    virtual GLsizeiptr getVBOSize() = 0;
-    virtual GLsizeiptr getEBOSize() = 0;
-    virtual void fillInVBO(void *buffer) = 0;
-    virtual void fillInEBO(void *buffer) = 0;
-    virtual const std::vector<GlVertexAttribInput> &getVertexAttributes() = 0;
-    virtual GLsizei getVertexAttributesStride();
+    virtual GLsizeiptr getVBOSize() const = 0;
+    virtual GLsizeiptr getEBOSize() const = 0;
+    virtual void fillInVBO(void *buffer) const = 0;
+    virtual void fillInEBO(void *buffer) const = 0;
+    virtual const std::vector<GlVertexAttribInput> &getVertexAttributes() const = 0;
+    virtual GLsizei getVertexAttributesStride() const;
 };
