@@ -23,7 +23,7 @@ string read_shader_code(const GLchar* shaderPath)
 GLuint compile_shader(const GLchar* shaderCode, GLenum shaderType)
 {
     GLuint shader_id = glCreateShader(shaderType);
-    glShaderSource(shader_id, 1, &shaderCode, NULL);
+    glShaderSource(shader_id, 1, &shaderCode, nullptr);
     glCompileShader(shader_id);
 
     // Print compile errors if any
@@ -32,7 +32,7 @@ GLuint compile_shader(const GLchar* shaderCode, GLenum shaderType)
     if(!success)
     {
         GLchar infoLog[512];
-        glGetShaderInfoLog(shader_id, sizeof(infoLog), NULL, infoLog);
+        glGetShaderInfoLog(shader_id, sizeof(infoLog), nullptr, infoLog);
         string msg = string("Shader compilation: ") + infoLog;
         throw runtime_error(msg.c_str());
     }
@@ -49,7 +49,7 @@ ShaderProgram::ShaderProgram(const GLchar* vertexPath, const GLchar* fragmentPat
     GLuint fragment_id = compile_shader(fragment_code.c_str(), GL_FRAGMENT_SHADER);
 
     // link shader program
-    program_id = glCreateProgram();
+    program_id = static_cast<GLint>(glCreateProgram());
     glAttachShader(program_id, vertex_id);
     glAttachShader(program_id, fragment_id);
     glLinkProgram(program_id);
@@ -60,7 +60,7 @@ ShaderProgram::ShaderProgram(const GLchar* vertexPath, const GLchar* fragmentPat
     if(!success)
     {
         GLchar infoLog[512];
-        glGetProgramInfoLog(program_id, sizeof(infoLog), NULL, infoLog);
+        glGetProgramInfoLog(program_id, sizeof(infoLog), nullptr, infoLog);
         string msg = string("Shader program linking: ") + infoLog;
         throw runtime_error(msg.c_str());
     }

@@ -20,8 +20,8 @@ class Textures
 public:
     Textures(std::initializer_list<TextureInitializer> textures);
     int numberOfTextures() const;
-    void bindByIndex(GLuint programId, int index);
-    void bindAll(GLuint programId);
+    void bindByIndex(GLint programId, int index) const;
+    void bindAll(GLint programId) const;
 
 private:
     struct Image

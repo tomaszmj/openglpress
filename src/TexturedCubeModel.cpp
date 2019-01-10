@@ -18,7 +18,7 @@ GLsizeiptr TexturedCubeModel::getVBOSize() const
 
 GLsizeiptr TexturedCubeModel::getEBOSize() const
 {
-    return 36*sizeof(GLfloat);
+    return 36*sizeof(GLuint);
 }
 
 void TexturedCubeModel::fillInVBO(void *buffer) const

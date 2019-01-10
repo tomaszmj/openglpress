@@ -11,6 +11,7 @@
 #include <Camera.h>
 #include <TexturedCubeModel.h>
 #include <VAOWrapper.h>
+#include <RenderTarget.h>
 using namespace std;
 
 GLuint WIDTH = 800, HEIGHT = 600;
@@ -86,22 +87,20 @@ int main()
 
         glViewport(0, 0, WIDTH, HEIGHT);
 
-        // Let's check what are maximum parameters counts
         GLint nrAttributes;
         glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
         cout << "Max vertex attributes allowed: " << nrAttributes << std::endl;
         glGetIntegerv(GL_MAX_TEXTURE_COORDS, &nrAttributes);
         cout << "Max texture coords allowed: " << nrAttributes << std::endl;
 
-        // Build, compile and link shader program
         ShaderProgram theProgram("resources/shaders/gl_04.vert", "resources/shaders/gl_04.frag");
 
         std::unique_ptr<AbstractModelItem> item(dynamic_cast<AbstractModelItem*>(new TexturedCubeModel()));
-        VAOWrapper vaoWrapper(std::move(item));
+        std::unique_ptr<VAOWrapper> vao_wrapper(new VAOWrapper(std::move(item)));
+        RenderTarget render_target(theProgram, std::move(vao_wrapper));
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // Set texture filtering parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -109,45 +108,29 @@ int main()
             TextureInitializer("resources/textures/iipw.png", "Texture0"),
             TextureInitializer("resources/textures/weiti.png", "Texture1")
         });
+        render_target.attachTextures(&textures);
 
         glEnable(GL_DEPTH_TEST);
-
-        glm::mat4 model(1), projection, transform;
-        // model = glm::translate(model, glm::vec3(-0.5f, -0.5f, -0.5f));
+        glm::mat4 model(1), projection;
         glm::vec3 eye(0.9f, 0.8f, 3.0f);
         glm::vec3 center(0.0f);
         Camera camera(eye, center);
         
-        // main event loop
         while(!glfwWindowShouldClose(window))
         {    
             projection = glm::perspective(glm::radians(40.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-            // view = glm::rotate(view, glm::radians(0.1f), glm::vec3(0, 1, 0));
-
-            // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
             glfwPollEvents();
             process_input(window, camera);
-
-            // Clear the colorbuffer
             glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
             textures.bindAll(theProgram.get_programID());
 
-            theProgram.Use();
-
-            vaoWrapper.bind();
             for(int i = 0; i < 4; ++i)
             {
                 glm::mat4 changed_model = glm::translate(model, glm::vec3(i*1.0f, i*1.5f, i*2.0f));
-                transform = projection * camera.getViewMatrix() * changed_model;
-                GLuint transformLoc = glGetUniformLocation(theProgram.get_programID(), "transform");
-                glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+                render_target.modelMatrix = changed_model;
+                render_target.render(projection * camera.getViewMatrix());
             }
-            vaoWrapper.unbind();
-
-            // Swap the screen buffers
             glfwSwapBuffers(window);
         }
     }

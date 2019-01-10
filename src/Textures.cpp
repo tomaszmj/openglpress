@@ -18,7 +18,7 @@ int Textures::numberOfTextures() const
     return static_cast<int>(textureIds.size());
 }
 
-void Textures::bindByIndex(GLuint programId, int index)
+void Textures::bindByIndex(GLint programId, int index) const
 {
     assert(index < numberOfTextures());
     glActiveTexture(GL_TEXTURE0 + index);
@@ -26,7 +26,7 @@ void Textures::bindByIndex(GLuint programId, int index)
     glUniform1i(glGetUniformLocation(programId, textureNames[index].c_str()), index);
 }
 
-void Textures::bindAll(GLuint programId)
+void Textures::bindAll(GLint programId) const
 {
     for(int i = 0; i < numberOfTextures(); ++i)
         bindByIndex(programId, i); 
