@@ -1,23 +1,23 @@
-#include <RenderTarget.h>
+#include <RenderedObject.h>
 #include <Shprogram.h>
 #include <Textures.h>
 #include <VAOWrapper.h>
 #include <glm/gtc/type_ptr.hpp>
 
-RenderTarget::RenderTarget(const ShaderProgram &shader_program, std::unique_ptr<VAOWrapper> vao_wrapper)
+RenderedObject::RenderedObject(const ShaderProgram &shader_program, std::unique_ptr<VAOWrapper> vao_wrapper)
     :  modelMatrix(1), shaderProgram(shader_program), vaoWrapper(std::move(vao_wrapper)), textures(nullptr)
 { }
 
-RenderTarget::RenderTarget(const ShaderProgram &shader_program, std::unique_ptr<VAOWrapper> vao_wrapper, const glm::mat4 &model_matrix)
+RenderedObject::RenderedObject(const ShaderProgram &shader_program, std::unique_ptr<VAOWrapper> vao_wrapper, const glm::mat4 &model_matrix)
     : modelMatrix(model_matrix), shaderProgram(shader_program), vaoWrapper(std::move(vao_wrapper)), textures(nullptr)
 { }
 
-void RenderTarget::attachTextures(const Textures *textures)
+void RenderedObject::attachTextures(const Textures *textures)
 {
     this->textures = textures;
 }
 
-void RenderTarget::render(const glm::mat4 &view_projection_matrix)
+void RenderedObject::render(const glm::mat4 &view_projection_matrix)
 {
     shaderProgram.Use();
     if(textures)
