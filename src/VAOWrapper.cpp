@@ -34,7 +34,7 @@ void VAOWrapper::unbind() const
     glBindVertexArray(0);
 }
 
-GLsizei VAOWrapper::getNumberOfVertices()
+GLsizei VAOWrapper::getNumberOfVertices() const
 {
     return numberOfVertices;
 }

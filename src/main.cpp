@@ -15,7 +15,6 @@
 #include <RenderedObject.h>
 #include <Window.h>
 
-
 void run()
 {
     Window window("gkom press", 800, 600);
@@ -27,41 +26,33 @@ void run()
     ShaderProgram theProgram("resources/shaders/gl_04.vert", "resources/shaders/gl_04.frag");
     ShaderProgram simpleShader("resources/shaders/gl_simple.vert", "resources/shaders/gl_simple.frag");
 
-    std::unique_ptr<AbstractModelItem> item(dynamic_cast<AbstractModelItem*>(new TexturedCubeModel()));
-    std::unique_ptr<AbstractModelItem> item_cylinder(
-                dynamic_cast<AbstractModelItem*>(new CylinderModel(1000, 10)));
-    std::unique_ptr<VAOWrapper> vao_wrapper(new VAOWrapper(std::move(item)));
-    std::unique_ptr<VAOWrapper> vao_wrapper_cylinder(new VAOWrapper(std::move(item_cylinder)));
-    RenderedObject rendered_object(theProgram, std::move(vao_wrapper));
-    RenderedObject rendered_object_cylinder(simpleShader, std::move(vao_wrapper_cylinder));
+    Textures textures({
+        TextureInitializer("resources/textures/iipw.png", "Texture0"),
+        TextureInitializer("resources/textures/weiti.png", "Texture1")
+    });
+
+    std::unique_ptr<AbstractModelItem> cube(new TexturedCubeModel());
+    std::unique_ptr<AbstractModelItem> cylinder(new CylinderModel(1000, 10));
+    VAOWrapper vao_wrapper_cube(std::move(cube));
+    VAOWrapper vao_wrapper_cylinder(std::move(cylinder));
+    std::vector<RenderedObject> rendered_objects({
+        RenderedObject(theProgram, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(1.5f, 1.5f, 2.0f)), &textures),
+        RenderedObject(theProgram, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(2.1f, 3.0f, 4.0f)), &textures),
+        RenderedObject(simpleShader, vao_wrapper_cylinder),
+    });
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    Textures textures({
-        TextureInitializer("resources/textures/iipw.png", "Texture0"),
-        TextureInitializer("resources/textures/weiti.png", "Texture1")
-    });
-    rendered_object.attachTextures(&textures);
-
     glEnable(GL_DEPTH_TEST);
-    glm::mat4 model(1);
 
     while(!window.shouldClose())
     {
         window.processInput();
         window.clearColor(0.1f, 0.2f, 0.3f, 0.0f);
-        textures.bindAll(theProgram.get_programID());
-
-        for(int i = 0; i < 4; ++i)
-        {
-            glm::mat4 changed_model = glm::translate(model, glm::vec3(i*1.0f, i*1.5f, i*2.0f));
-            rendered_object.modelMatrix = changed_model;
-            //rendered_object.render(window.getTransfromMatrix());
-        }
-        rendered_object_cylinder.render(window.getTransfromMatrix());
+        for(const RenderedObject &rendered_object: rendered_objects)
+            rendered_object.render(window.getTransfromMatrix());
         window.swapBuffers();
     }
 }

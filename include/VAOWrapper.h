@@ -11,7 +11,7 @@ public:
     ~VAOWrapper();
     void bind() const;
     void unbind() const;
-    GLsizei getNumberOfVertices();
+    GLsizei getNumberOfVertices() const;
 
 private:
     GLuint VAO;
