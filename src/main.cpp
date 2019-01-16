@@ -45,7 +45,7 @@ int main()
 
         std::unique_ptr<AbstractModelItem> item(dynamic_cast<AbstractModelItem*>(new TexturedCubeModel()));
         std::unique_ptr<AbstractModelItem> item_cylinder(
-                    dynamic_cast<AbstractModelItem*>(new CylinderModel(1000, 1, 10)));
+                    dynamic_cast<AbstractModelItem*>(new CylinderModel(1000, 10)));
         std::unique_ptr<VAOWrapper> vao_wrapper(new VAOWrapper(std::move(item)));
         std::unique_ptr<VAOWrapper> vao_wrapper_cylinder(new VAOWrapper(std::move(item_cylinder)));
         RenderedObject rendered_object(theProgram, std::move(vao_wrapper));

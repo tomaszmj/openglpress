@@ -3,23 +3,23 @@
 
 const double PI = std::atan(1)*4;
 
-CylinderModel::CylinderModel(unsigned sides, unsigned radius_segments, unsigned height_segments)
+CylinderModel::CylinderModel(unsigned sides, unsigned height_segments)
     : vertexAttributes({
         AbstractModelItem::GlVertexAttribInput{3, GL_FLOAT, 3*sizeof(GLfloat)}, // position
         AbstractModelItem::GlVertexAttribInput{1, GL_FLOAT, 1*sizeof(GLfloat)}, // tmp
-    }), sides(sides), radiusSegments(radius_segments), heightSegments(height_segments)
+    }), sides(sides), heightSegments(height_segments)
 {}
 
 CylinderModel::~CylinderModel() {}
 
 GLsizeiptr CylinderModel::getVBOSize() const
 {
-    return sides * (heightSegments + 1) * 4 * sizeof(GLfloat);
+    return (sides * (heightSegments + 1) + 2) * 4 * sizeof(GLfloat);
 }
 
 GLsizeiptr CylinderModel::getEBOSize() const
 {
-    return sides * heightSegments * 6 * sizeof(GLuint);
+    return (sides * heightSegments * 2 + sides * 2) * 3 * sizeof(GLuint);
 }
 
 void CylinderModel::fillInVBO(void *buffer) const
@@ -35,22 +35,23 @@ void CylinderModel::fillInVBO(void *buffer) const
         for(unsigned j = 0; j <= heightSegments; ++j)
         {
             GLfloat y = static_cast<float>(-0.5 + static_cast<double>(j) / height_segments_f);
-            buffer_float[0] = x;
-            buffer_float[1] = y;
-            buffer_float[2] = z;
-            buffer_float[3] = static_cast<GLfloat>(static_cast<double>(i) / sides_f);
-            buffer_float += 4;
+            GLfloat tmp = static_cast<GLfloat>(static_cast<double>(i) / sides_f);
+            buffer_float = fillOneVertexInVBO(buffer_float, x, y, z, tmp);
         }
     }
+    buffer_float = fillOneVertexInVBO(buffer_float, 0.0, -0.5, 0.0, 0.0);
+    fillOneVertexInVBO(buffer_float, 0.0, 0.5, 0.0, 1.0);
 }
 
 void CylinderModel::fillInEBO(void *buffer) const
 {
     GLuint *buffer_uint = reinterpret_cast<GLuint*>(buffer);
+    unsigned lower_base_center_in_vbo = sides * (heightSegments + 1);
     for(unsigned i = 0; i < sides; ++i)
     {
         for(unsigned j = 0; j < heightSegments; ++j)
         {
+            // sides:
             buffer_uint[0] = indexInVBO(i, j);
             buffer_uint[1] = indexInVBO((i + 1) % sides, j);
             buffer_uint[2] = indexInVBO((i + 1) % sides, j + 1);
@@ -59,6 +60,15 @@ void CylinderModel::fillInEBO(void *buffer) const
             buffer_uint[5] = indexInVBO(i, j + 1);
             buffer_uint += 6;
         }
+        // lower base:
+        buffer_uint[0] = indexInVBO(i, 0);
+        buffer_uint[1] = lower_base_center_in_vbo;
+        buffer_uint[2] = indexInVBO((i + 1) % sides, 0);
+        // upper base:
+        buffer_uint[3] = indexInVBO(i, heightSegments);
+        buffer_uint[4] = lower_base_center_in_vbo + 1;
+        buffer_uint[5] = indexInVBO((i + 1) % sides, heightSegments);
+        buffer_uint += 6;
     }
 }
 
@@ -70,4 +80,14 @@ const std::vector<AbstractModelItem::GlVertexAttribInput> &CylinderModel::getVer
 GLuint CylinderModel::indexInVBO(unsigned side_index, unsigned height_index) const
 {
     return side_index * (heightSegments + 1) + height_index;
+}
+
+GLfloat *CylinderModel::fillOneVertexInVBO(GLfloat *buffer, GLfloat x, GLfloat y, GLfloat z, GLfloat tmp_parameter) const
+{
+    buffer[0] = x;
+    buffer[1] = y;
+    buffer[2] = z;
+    buffer[3] = tmp_parameter;
+    buffer += 4;
+    return buffer;
 }
