@@ -59,9 +59,20 @@ void Window::processInput()
         camera.move(camera_move_forward_constant, Camera::FORWARD);
 }
 
-GLFWwindow *Window::getGLFWWindow()
+bool Window::shouldClose()
 {
-    return glfwWindow;
+    return glfwWindowShouldClose(glfwWindow);
+}
+
+void Window::swapBuffers()
+{
+    glfwSwapBuffers(glfwWindow);
+}
+
+void Window::clearColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+{
+    glClearColor(r, g, b, a);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 const glm::mat4 &Window::getTransfromMatrix() const

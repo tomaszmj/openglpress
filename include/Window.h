@@ -9,7 +9,9 @@ class Window
 public:
     Window(const char *title, int width, int height);
     void processInput();
-    GLFWwindow *getGLFWWindow();
+    bool shouldClose();
+    void swapBuffers();
+    void clearColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
     const glm::mat4 &getTransfromMatrix() const;
 
 private:

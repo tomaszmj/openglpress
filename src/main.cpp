@@ -65,11 +65,10 @@ int main()
         glEnable(GL_DEPTH_TEST);
         glm::mat4 model(1);
         
-        while(!glfwWindowShouldClose(window.getGLFWWindow()))
+        while(!window.shouldClose())
         {    
             window.processInput();
-            glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            window.clearColor(0.1f, 0.2f, 0.3f, 0.0f);
             textures.bindAll(theProgram.get_programID());
 
             for(int i = 0; i < 4; ++i)
@@ -79,7 +78,7 @@ int main()
                 //rendered_object.render(window.getTransfromMatrix());
             }
             rendered_object_cylinder.render(window.getTransfromMatrix());
-            glfwSwapBuffers(window.getGLFWWindow());
+            window.swapBuffers();
         }
     }
     catch(std::exception &ex)
