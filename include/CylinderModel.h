@@ -17,4 +17,6 @@ private:
     unsigned sides;
     unsigned radiusSegments;
     unsigned heightSegments;
+
+    GLuint indexInVBO(unsigned side_index, unsigned height_index) const;
 };

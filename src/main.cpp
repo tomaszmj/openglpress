@@ -10,6 +10,7 @@
 #include <Textures.h>
 #include <Camera.h>
 #include <TexturedCubeModel.h>
+#include <CylinderModel.h>
 #include <VAOWrapper.h>
 #include <RenderedObject.h>
 #include <Window.h>
@@ -40,10 +41,15 @@ int main()
         std::cout << "Max texture coords allowed: " << nrAttributes << std::endl;
 
         ShaderProgram theProgram("resources/shaders/gl_04.vert", "resources/shaders/gl_04.frag");
+        ShaderProgram simpleShader("resources/shaders/gl_simple.vert", "resources/shaders/gl_simple.frag");
 
         std::unique_ptr<AbstractModelItem> item(dynamic_cast<AbstractModelItem*>(new TexturedCubeModel()));
+        std::unique_ptr<AbstractModelItem> item_cylinder(
+                    dynamic_cast<AbstractModelItem*>(new CylinderModel(1000, 1, 10)));
         std::unique_ptr<VAOWrapper> vao_wrapper(new VAOWrapper(std::move(item)));
+        std::unique_ptr<VAOWrapper> vao_wrapper_cylinder(new VAOWrapper(std::move(item_cylinder)));
         RenderedObject rendered_object(theProgram, std::move(vao_wrapper));
+        RenderedObject rendered_object_cylinder(simpleShader, std::move(vao_wrapper_cylinder));
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -70,8 +76,9 @@ int main()
             {
                 glm::mat4 changed_model = glm::translate(model, glm::vec3(i*1.0f, i*1.5f, i*2.0f));
                 rendered_object.modelMatrix = changed_model;
-                rendered_object.render(window.getTransfromMatrix());
+                //rendered_object.render(window.getTransfromMatrix());
             }
+            rendered_object_cylinder.render(window.getTransfromMatrix());
             glfwSwapBuffers(window.getGLFWWindow());
         }
     }
