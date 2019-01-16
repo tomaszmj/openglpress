@@ -30,12 +30,12 @@ void CylinderModel::fillInVBO(void *buffer) const
     for(unsigned i = 0; i < sides; ++i)
     {
         double alpha = static_cast<double>(i) * 2.0 * PI / sides_f;
-        GLfloat x = static_cast<float>(std::cos(alpha) * 0.5);
-        GLfloat z = static_cast<float>(std::sin(alpha) * 0.5);
+        GLfloat x = static_cast<GLfloat>(std::cos(alpha) * 0.5);
+        GLfloat z = static_cast<GLfloat>(std::sin(alpha) * 0.5);
+        GLfloat tmp = static_cast<GLfloat>(static_cast<double>(i) / sides_f);
         for(unsigned j = 0; j <= heightSegments; ++j)
         {
-            GLfloat y = static_cast<float>(-0.5 + static_cast<double>(j) / height_segments_f);
-            GLfloat tmp = static_cast<GLfloat>(static_cast<double>(i) / sides_f);
+            GLfloat y = static_cast<GLfloat>(-0.5 + static_cast<double>(j) / height_segments_f);
             buffer_float = fillOneVertexInVBO(buffer_float, x, y, z, tmp);
         }
     }
@@ -46,7 +46,7 @@ void CylinderModel::fillInVBO(void *buffer) const
 void CylinderModel::fillInEBO(void *buffer) const
 {
     GLuint *buffer_uint = reinterpret_cast<GLuint*>(buffer);
-    unsigned lower_base_center_in_vbo = sides * (heightSegments + 1);
+    GLuint lower_base_center_in_vbo = sides * (heightSegments + 1);
     for(unsigned i = 0; i < sides; ++i)
     {
         for(unsigned j = 0; j < heightSegments; ++j)
