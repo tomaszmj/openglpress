@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <Textures.h>
 #include <TexturedCubeModel.h>
+#include <SimpleCubeModel.h>
 #include <CylinderModel.h>
 #include <VAOWrapper.h>
 #include <RenderedObject.h>
@@ -32,8 +33,10 @@ void run()
     });
 
     std::unique_ptr<AbstractModelItem> cube(new TexturedCubeModel());
+    std::unique_ptr<AbstractModelItem> simple_cube(new SimpleCubeModel());
     std::unique_ptr<AbstractModelItem> cylinder(new CylinderModel(1000, 10));
     VAOWrapper vao_wrapper_cube(std::move(cube));
+    VAOWrapper vao_wrapper_simple_cube(std::move(simple_cube));
     VAOWrapper vao_wrapper_cylinder(std::move(cylinder));
 
     glm::mat4 background_model_matrix = glm::scale(glm::mat4(1), glm::vec3(30.0f, 30.0f, 30.0f));
@@ -44,6 +47,7 @@ void run()
         RenderedObject(old_program, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(2.1f, 3.0f, 4.0f)), &textures),
         RenderedObject(simple_shader, vao_wrapper_cylinder, glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.5f, 0.0f))),
         RenderedObject(background, vao_wrapper_cube, background_model_matrix, &textures),
+        RenderedObject(old_program, vao_wrapper_simple_cube, glm::translate(glm::mat4(1), glm::vec3(6.0f, 5.0f, 6.0f))),
     });
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
