@@ -1,5 +1,5 @@
 #include <RenderedObject.h>
-#include <Shprogram.h>
+#include <ShaderProgram.h>
 #include <Textures.h>
 #include <VAOWrapper.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -12,13 +12,11 @@ RenderedObject::RenderedObject(const ShaderProgram &shader_program, const VAOWra
 
 void RenderedObject::render(const glm::mat4 &view_projection_matrix) const
 {
-    shaderProgram.Use();
+    shaderProgram.use();
     if(textures)
-        textures->bindAll(shaderProgram.get_programID());
+        textures->bindAll(shaderProgram.getId());
     vaoWrapper.bind();
-    glm::mat4 transform = view_projection_matrix * modelMatrix;
-    GLint transform_loc = glGetUniformLocation(shaderProgram.get_programID(), "transform");
-    glUniformMatrix4fv(transform_loc, 1, GL_FALSE, glm::value_ptr(transform));
+    shaderProgram.setMat4Uniform("transform", view_projection_matrix * modelMatrix);
     glDrawElements(GL_TRIANGLES, vaoWrapper.getNumberOfVertices(), GL_UNSIGNED_INT, nullptr);
     vaoWrapper.unbind();
 }

@@ -15,6 +15,28 @@ struct TextureInitializer
     {}
 };
 
+
+class Texture
+{
+public:
+    Texture(const std::string &filename, const std::string &texture_name);
+    void bind(GLint programId) const;
+
+private:
+    struct Image
+    {
+        unsigned char *data;
+        int width;
+        int height;
+
+        Image(const char *filename);
+        ~Image();
+    };
+
+    GLuint id;
+    const std::string name;
+};
+
 class Textures
 {
 public:

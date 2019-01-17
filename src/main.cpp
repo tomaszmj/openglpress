@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include <Shprogram.h>
+#include <ShaderProgram.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <memory>
@@ -27,9 +27,9 @@ void run()
 
     Textures textures({
         TextureInitializer("resources/textures/iipw.png", "Texture0"),
-        TextureInitializer("resources/textures/weiti.png", "Texture1")
+        TextureInitializer("resources/textures/weiti.png", "Texture1"),
+        TextureInitializer("resources/textures/wood.png", "wood"),
     });
-    Textures wooden_texture({TextureInitializer("resources/textures/wood.png", "wood")});
 
     std::unique_ptr<AbstractModelItem> cube(new TexturedCubeModel());
     std::unique_ptr<AbstractModelItem> cylinder(new CylinderModel(1000, 10));
@@ -43,7 +43,7 @@ void run()
         RenderedObject(old_program, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(1.5f, 1.5f, 2.0f)), &textures),
         RenderedObject(old_program, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(2.1f, 3.0f, 4.0f)), &textures),
         RenderedObject(simple_shader, vao_wrapper_cylinder, glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.5f, 0.0f))),
-        RenderedObject(background, vao_wrapper_cube, background_model_matrix, &wooden_texture),
+        RenderedObject(background, vao_wrapper_cube, background_model_matrix, &textures),
     });
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
