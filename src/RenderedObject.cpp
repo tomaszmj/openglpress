@@ -17,6 +17,10 @@ void RenderedObject::render(const glm::mat4 &view_projection_matrix) const
         textures->bindAll(shaderProgram.getId());
     vaoWrapper.bind();
     shaderProgram.setMat4Uniform("transform", view_projection_matrix * modelMatrix);
+    shaderProgram.setMat4Uniform("model", modelMatrix);
+    shaderProgram.setVec3Uniform("lightColor", glm::vec3(1.0, 1.0, 1.0));
+    shaderProgram.setVec3Uniform("lightPosition", glm::vec3(14.49f, 29.49f, 14.49f));
+    shaderProgram.setVec3Uniform("objectColor", glm::vec3(0.0, 1.0, 0.0));
     glDrawElements(GL_TRIANGLES, vaoWrapper.getNumberOfVertices(), GL_UNSIGNED_INT, nullptr);
     vaoWrapper.unbind();
 }

@@ -7,6 +7,7 @@ add_definitions(${OPENGL_DEFINITIONS})
 include_directories("include")
 FILE(GLOB SRC_LIST "src/*.cpp")
 FILE(GLOB HEADER_LIST "include/*.h")
+FILE(GLOB SHADERS "resources/shaders/*")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     message("Running Windows build configuration.")
@@ -49,10 +50,10 @@ else(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     message("Unsupported OS, try hand-editing Linux configuraion.")
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")    
     
-add_executable(${PROJECT_NAME} ${SRC_LIST} ${HEADER_LIST})
+add_executable(${PROJECT_NAME} ${SRC_LIST} ${HEADER_LIST} ${SHADERS})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
     
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD    
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/resources
         ${CMAKE_CURRENT_BINARY_DIR}/resources)
