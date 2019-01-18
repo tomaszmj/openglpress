@@ -1,4 +1,4 @@
-#include "TexturedCubeModel.h"
+#include <TexturedCubeModel.h>
 #include <cstring>
 
 TexturedCubeModel::TexturedCubeModel()

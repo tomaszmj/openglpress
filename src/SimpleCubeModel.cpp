@@ -1,4 +1,4 @@
-#include "SimpleCubeModel.h"
+#include <SimpleCubeModel.h>
 #include <cstring>
 
 SimpleCubeModel::SimpleCubeModel()
