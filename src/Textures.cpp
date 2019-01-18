@@ -7,6 +7,10 @@
 Textures::Textures(std::initializer_list<TextureInitializer> textures)
     : textureIds(textures.size())
 {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     textureNames.reserve(textures.size());
     glGenTextures(textures.size(), textureIds.data());
     for(auto texture : textures)

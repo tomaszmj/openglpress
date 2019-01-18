@@ -2,7 +2,6 @@
 #include <ShaderProgram.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -35,14 +34,10 @@ void run()
         TextureInitializer("resources/textures/wood.png", "wood"),
     });
 
-    std::unique_ptr<AbstractModelItem> cube(new TexturedCubeModel());
-    std::unique_ptr<AbstractModelItem> simple_cube(new SimpleCubeModel());
-    std::unique_ptr<AbstractModelItem> illuminated_cube(new CubeModel());
-    std::unique_ptr<AbstractModelItem> cylinder(new CylinderModel(1000, 10));
-    VAOWrapper vao_wrapper_cube(std::move(cube));
-    VAOWrapper vao_wrapper_simple_cube(std::move(simple_cube));
-    VAOWrapper vao_wrapper_illuminated_cube(std::move(illuminated_cube));
-    VAOWrapper vao_wrapper_cylinder(std::move(cylinder));
+    VAOWrapper vao_wrapper_cube((TexturedCubeModel()));
+    VAOWrapper vao_wrapper_simple_cube((SimpleCubeModel()));
+    VAOWrapper vao_wrapper_illuminated_cube((CubeModel()));
+    VAOWrapper vao_wrapper_cylinder(CylinderModel(1000, 10));
 
     glm::mat4 background_model_matrix = glm::scale(glm::mat4(1), glm::vec3(30.0f, 30.0f, 30.0f));
     background_model_matrix = glm::translate(background_model_matrix, glm::vec3(0.0f, 0.5f, 0.0f));
@@ -56,10 +51,6 @@ void run()
         RenderedObject(light_shader, vao_wrapper_illuminated_cube, glm::translate(glm::mat4(1), glm::vec3(10.0f, 10.0f, 10.0f))),
     });
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glEnable(GL_DEPTH_TEST);
 
     while(!window.shouldClose())
