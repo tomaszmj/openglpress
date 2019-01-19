@@ -18,7 +18,7 @@ private:
     unsigned sides;
     unsigned heightSegments;
 
-    GLuint indexInVBO(unsigned side_index, unsigned height_index) const;
+    GLuint indexInVBOCurvedSurface(unsigned side_index, unsigned height_index) const;
     GLfloat *fillInVBOCurvedSurface(GLfloat *buffer) const;
     GLfloat *fillInVBOBases(GLfloat *buffer) const;
     GLuint *fillInEBOCurvedSurface(GLuint *buffer) const;

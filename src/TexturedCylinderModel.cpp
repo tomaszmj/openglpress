@@ -20,7 +20,7 @@ GLsizeiptr TexturedCylinderModel::getVBOSize() const
 
 GLsizeiptr TexturedCylinderModel::getEBOSize() const
 {
-    return (sides * heightSegments * 2) * 3 * sizeof(GLuint);
+    return (sides * heightSegments * 2 + sides * 2) * 3 * sizeof(GLuint);
 }
 
 void TexturedCylinderModel::fillInVBO(void *buffer) const
@@ -42,7 +42,7 @@ const std::vector<AbstractModelItem::GlVertexAttribInput> &TexturedCylinderModel
     return vertexAttributes;
 }
 
-GLuint TexturedCylinderModel::indexInVBO(unsigned side_index, unsigned height_index) const
+GLuint TexturedCylinderModel::indexInVBOCurvedSurface(unsigned side_index, unsigned height_index) const
 {
     return side_index * (heightSegments + 1) + height_index;
 }
@@ -72,8 +72,6 @@ GLfloat *TexturedCylinderModel::fillInVBOCurvedSurface(GLfloat *buffer) const
             buffer = fillOneVertexInVBO(buffer, position, normal, texture_coords);
         }
     }
-    buffer = fillOneVertexInVBO(buffer, glm::vec3(0.0, -0.5, 0.0), glm::vec3(0.0, -1.0, 0.0), glm::vec2(0.0, 0.0));
-    buffer = fillOneVertexInVBO(buffer, glm::vec3(0.0, 0.5, 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.0, 0.0));
     return buffer;
 }
 
@@ -100,6 +98,8 @@ GLfloat *TexturedCylinderModel::fillInVBOBases(GLfloat *buffer) const
             buffer = fillOneVertexInVBO(buffer, position, normal, texture_coords);
         }
     }
+    buffer = fillOneVertexInVBO(buffer, glm::vec3(0.0, -0.5, 0.0), glm::vec3(0.0, -1.0, 0.0), glm::vec2(0.5, 0.5));
+    buffer = fillOneVertexInVBO(buffer, glm::vec3(0.0, 0.5, 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.5, 0.5));
     return buffer;
 }
 
@@ -109,12 +109,12 @@ GLuint *TexturedCylinderModel::fillInEBOCurvedSurface(GLuint *buffer) const
     {
         for(unsigned j = 0; j < heightSegments; ++j)
         {
-            buffer[0] = indexInVBO(i, j);
-            buffer[1] = indexInVBO((i + 1) % sides, j);
-            buffer[2] = indexInVBO((i + 1) % sides, j + 1);
-            buffer[3] = indexInVBO(i, j);
-            buffer[4] = indexInVBO((i + 1) % sides, j + 1);
-            buffer[5] = indexInVBO(i, j + 1);
+            buffer[0] = indexInVBOCurvedSurface(i, j);
+            buffer[1] = indexInVBOCurvedSurface((i + 1) % sides, j);
+            buffer[2] = indexInVBOCurvedSurface((i + 1) % sides, j + 1);
+            buffer[3] = indexInVBOCurvedSurface(i, j);
+            buffer[4] = indexInVBOCurvedSurface((i + 1) % sides, j + 1);
+            buffer[5] = indexInVBOCurvedSurface(i, j + 1);
             buffer += 6;
         }
     }
@@ -123,20 +123,20 @@ GLuint *TexturedCylinderModel::fillInEBOCurvedSurface(GLuint *buffer) const
 
 GLuint *TexturedCylinderModel::fillInEBOBases(GLuint *buffer) const
 {
-//    GLuint lower_base_begin_in_vbo = sides * (heightSegments + 1);
-//    GLuint upper_base_begin_in_vbo = lower_base_begin_in_vbo + sides;
-//    for(unsigned i = 0; i < sides; ++i)
-//    {
-//        // lower base:
-//        buffer_uint[0] = lower_base_begin_in_vbo;
-//        buffer_uint[1] = lower_base_center_in_vbo;
-//        buffer_uint[2] = indexInVBO((i + 1) % sides, 0);
-//        // upper base:
-//        buffer_uint[3] = indexInVBO(i, heightSegments);
-//        buffer_uint[4] = lower_base_center_in_vbo + 1;
-//        buffer_uint[5] = indexInVBO((i + 1) % sides, heightSegments);
-//        buffer_uint += 6;
-//    }
+    const GLuint lower_base_begin_in_vbo = sides * (heightSegments + 1);
+    const GLuint lower_base_center_in_vbo = lower_base_begin_in_vbo + sides * 2;
+    const GLuint vertices_in_bases_circumferences = sides * 2;
+    for(GLuint i = 0; i < vertices_in_bases_circumferences; i += 2)
+    {
+        buffer[0] = i + lower_base_begin_in_vbo;
+        buffer[1] = lower_base_center_in_vbo;
+        buffer[2] = (i + 2) % vertices_in_bases_circumferences + lower_base_begin_in_vbo;
+        buffer[3] = (i + 1) % vertices_in_bases_circumferences + lower_base_begin_in_vbo;
+        buffer[4] = lower_base_center_in_vbo + 1;
+        buffer[5] = (i + 3) % vertices_in_bases_circumferences + lower_base_begin_in_vbo;
+        buffer += 6;
+    }
+    return buffer;
 }
 
 GLfloat *TexturedCylinderModel::fillOneVertexInVBO(GLfloat *buffer, const glm::vec3 &position, const glm::vec3 &normal_vector, const glm::vec2 &texture) const
