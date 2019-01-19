@@ -41,7 +41,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     find_package(GLM REQUIRED)
     message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
 
-    set(DEFAULT_FLAGS "-Wall -pedantic -Wextra -DGLEW_STATIC")
+    set(DEFAULT_FLAGS "-Wall -pedantic -Wextra")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DEFAULT_FLAGS} -O0 -g")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${DEFAULT_FLAGS} -Werror -O3 -DNDEBUG")
     set(LIBS ${OPENGL_LIBRARY} ${GLEW_LIBRARY} ${GLFW3_LIBRARY} ${SOIL_LIBRARY})

@@ -80,7 +80,7 @@ GLfloat *CylinderModel::fillInVBOBases(GLfloat *buffer) const
     glm::vec3 position;
     glm::vec3 normal;
     glm::vec2 texture_coords;
-    normal.x = normal.y = 0.0f;
+    normal.x = normal.z = 0.0f;
     for(unsigned i = 0; i < sides; ++i)
     {
         double circumference_fraction = static_cast<double>(i) / static_cast<double>(sides);

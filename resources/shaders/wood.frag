@@ -8,7 +8,7 @@ uniform vec3 lightColor;
 uniform vec3 lightPosition;
 uniform vec3 objectColor;
 
-uniform sampler2D wood;
+uniform sampler2D Texture;
 
 void main()
 {
@@ -17,6 +17,6 @@ void main()
     float distanceCoefficient = 0.7 / (dot(directionToLight, directionToLight) + 1.0);
     float diffuse = 0.1 * diffuseCoefficient;
     float ambient = 0.2;
-    vec4 ownColor = texture(wood, textureCoordinates);
+    vec4 ownColor = texture(Texture, textureCoordinates);
     color = (diffuse + ambient + distanceCoefficient) * vec4(lightColor, 1.0) * ownColor;
 }
