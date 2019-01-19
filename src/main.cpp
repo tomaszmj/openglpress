@@ -9,6 +9,7 @@
 #include <ColouredCubeModel.h>
 #include <SimpleCubeModel.h>
 #include <CubeModel.h>
+#include <CubeModelInside.h>
 #include <CylinderModel.h>
 #include <TexturedCylinderModel.h>
 #include <VAOWrapper.h>
@@ -23,36 +24,29 @@ void run()
     if(glewInit() != GLEW_OK)
         throw std::runtime_error("GLEW Initialization failed");
 
-    ShaderProgram old_program("resources/shaders/gl_04.vert", "resources/shaders/gl_04.frag");
-    ShaderProgram simple_shader("resources/shaders/gl_simple.vert", "resources/shaders/gl_simple.frag");
-    ShaderProgram background_shader("resources/shaders/gl_04.vert", "resources/shaders/background_wood.frag");
     ShaderProgram light_source_shader("resources/shaders/light.vert", "resources/shaders/light_source.frag");
-    ShaderProgram light_shader("resources/shaders/light.vert", "resources/shaders/light.frag");
+    ShaderProgram metal_shader("resources/shaders/light.vert", "resources/shaders/metal.frag");
+    ShaderProgram wood_shader("resources/shaders/light.vert", "resources/shaders/wood.frag");
 
     Textures textures({
-        TextureInitializer("resources/textures/iipw.png", "Texture0"),
-        TextureInitializer("resources/textures/weiti.png", "Texture1"),
         TextureInitializer("resources/textures/wood.png", "wood"),
-        TextureInitializer("resources/textures/metal.png", "Texture"),
+        TextureInitializer("resources/textures/metal.png", "metal"),
     });
 
-    VAOWrapper vao_wrapper_cube((ColouredCubeModel()));
     VAOWrapper vao_wrapper_simple_cube((SimpleCubeModel()));
-    VAOWrapper vao_wrapper_illuminated_cube((CubeModel()));
-    VAOWrapper vao_wrapper_cylinder(CylinderModel(1000, 10));
-    VAOWrapper vao_wrapper_cylinder2(TexturedCylinderModel(1000, 10));
+    VAOWrapper vao_wrapper_cube((CubeModel()));
+    VAOWrapper vao_wrapper_cube_inside((CubeModelInside()));
+    VAOWrapper vao_wrapper_cylinder(TexturedCylinderModel(1000, 10));
 
     glm::mat4 background_model_matrix = glm::scale(glm::mat4(1), glm::vec3(30.0f, 30.0f, 30.0f));
     background_model_matrix = glm::translate(background_model_matrix, glm::vec3(0.0f, 0.5f, 0.0f));
 
     std::vector<RenderedObject> rendered_objects({
-//        RenderedObject(old_program, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(1.5f, 1.5f, 2.0f)), &textures),
-//        RenderedObject(old_program, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(2.1f, 3.0f, 4.0f)), &textures),
-//        RenderedObject(simple_shader, vao_wrapper_cylinder, glm::translate(glm::mat4(1), glm::vec3(15.0f, 10.0f, 15.0f))), // 0.0f, 0.5f, 0.0f
-        RenderedObject(light_shader, vao_wrapper_cylinder2, glm::translate(glm::mat4(1), glm::vec3(10.0f, 13.0f, 10.0f))), // 0.0f, 0.5f, 0.0f
-//        RenderedObject(background_shader, vao_wrapper_cube, background_model_matrix, &textures),
+        RenderedObject(metal_shader, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(1.5f, 1.5f, 2.0f)), &textures),
+        RenderedObject(metal_shader, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(2.1f, 3.0f, 4.0f)), &textures),
+        RenderedObject(metal_shader, vao_wrapper_cylinder, glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.5f, 0.0f)), &textures),
+        RenderedObject(wood_shader, vao_wrapper_cube_inside, background_model_matrix, &textures),
         RenderedObject(light_source_shader, vao_wrapper_simple_cube, glm::translate(glm::mat4(1), glm::vec3(14.49f, 29.49f, 14.49f))),
-        RenderedObject(light_shader, vao_wrapper_illuminated_cube, glm::translate(glm::mat4(1), glm::vec3(10.0f, 10.0f, 10.0f)), &textures),
     });
 
     glEnable(GL_DEPTH_TEST);

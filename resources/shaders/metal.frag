@@ -8,7 +8,7 @@ uniform vec3 lightColor;
 uniform vec3 lightPosition;
 uniform vec3 objectColor;
 
-uniform sampler2D Texture;
+uniform sampler2D metal;
 
 void main()
 {
@@ -16,6 +16,6 @@ void main()
     float diffuseCoefficient = max(dot(normalize(transformedNormal), directionToLight), 0.0);
     float diffuse = 0.9 * diffuseCoefficient;
     float ambient = 0.1;
-    vec4 ownColor = texture(Texture, textureCoordinates);
+    vec4 ownColor = texture(metal, textureCoordinates);
     color = (diffuse + ambient) * vec4(lightColor, 1.0) * ownColor;
 }
