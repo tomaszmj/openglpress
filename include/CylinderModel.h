@@ -1,5 +1,6 @@
 #pragma once
 #include "AbstractModelItem.h"
+#include <glm/glm.hpp>
 
 class CylinderModel: public AbstractModelItem
 {
@@ -17,6 +18,11 @@ private:
     unsigned sides;
     unsigned heightSegments;
 
-    GLuint indexInVBO(unsigned side_index, unsigned height_index) const;
-    GLfloat *fillOneVertexInVBO(GLfloat *buffer, GLfloat x, GLfloat y, GLfloat z, GLfloat tmp_parameter) const;
+    GLuint indexInVBOCurvedSurface(unsigned side_index, unsigned height_index) const;
+    GLfloat *fillInVBOCurvedSurface(GLfloat *buffer) const;
+    GLfloat *fillInVBOBases(GLfloat *buffer) const;
+    GLuint *fillInEBOCurvedSurface(GLuint *buffer) const;
+    GLuint *fillInEBOBases(GLuint *buffer) const;
+    GLfloat *fillOneVertexInVBO(GLfloat *buffer, const glm::vec3 &position,
+                                const glm::vec3 &normal_vector, const glm::vec2 &texture) const;
 };

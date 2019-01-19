@@ -6,12 +6,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Textures.h>
-#include <ColouredCubeModel.h>
 #include <SimpleCubeModel.h>
 #include <CubeModel.h>
 #include <CubeModelInside.h>
 #include <CylinderModel.h>
-#include <TexturedCylinderModel.h>
 #include <VAOWrapper.h>
 #include <RenderedObject.h>
 #include <Window.h>
@@ -24,9 +22,9 @@ void run()
     if(glewInit() != GLEW_OK)
         throw std::runtime_error("GLEW Initialization failed");
 
-    ShaderProgram light_source_shader("resources/shaders/light.vert", "resources/shaders/light_source.frag");
-    ShaderProgram metal_shader("resources/shaders/light.vert", "resources/shaders/metal.frag");
-    ShaderProgram wood_shader("resources/shaders/light.vert", "resources/shaders/wood.frag");
+    ShaderProgram light_source_shader("resources/shaders/light_source.vert", "resources/shaders/light_source.frag");
+    ShaderProgram metal_shader("resources/shaders/object.vert", "resources/shaders/metal.frag");
+    ShaderProgram wood_shader("resources/shaders/object.vert", "resources/shaders/wood.frag");
 
     Textures textures({
         TextureInitializer("resources/textures/wood.png", "wood"),
@@ -36,7 +34,7 @@ void run()
     VAOWrapper vao_wrapper_simple_cube((SimpleCubeModel()));
     VAOWrapper vao_wrapper_cube((CubeModel()));
     VAOWrapper vao_wrapper_cube_inside((CubeModelInside()));
-    VAOWrapper vao_wrapper_cylinder(TexturedCylinderModel(1000, 10));
+    VAOWrapper vao_wrapper_cylinder(CylinderModel(1000, 10));
 
     glm::mat4 background_model_matrix = glm::scale(glm::mat4(1), glm::vec3(30.0f, 30.0f, 30.0f));
     background_model_matrix = glm::translate(background_model_matrix, glm::vec3(0.0f, 0.5f, 0.0f));
