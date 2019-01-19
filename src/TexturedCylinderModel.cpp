@@ -136,8 +136,7 @@ GLuint *TexturedCylinderModel::fillInEBOBases(GLuint *buffer) const
 //        buffer_uint[4] = lower_base_center_in_vbo + 1;
 //        buffer_uint[5] = indexInVBO((i + 1) % sides, heightSegments);
 //        buffer_uint += 6;
-    }
-
+//    }
 }
 
 GLfloat *TexturedCylinderModel::fillOneVertexInVBO(GLfloat *buffer, const glm::vec3 &position, const glm::vec3 &normal_vector, const glm::vec2 &texture) const
