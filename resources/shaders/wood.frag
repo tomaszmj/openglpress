@@ -6,7 +6,6 @@ out vec4 color;
 
 uniform vec3 lightColor;
 uniform vec3 lightPosition;
-uniform vec3 objectColor;
 
 uniform sampler2D Texture;
 
