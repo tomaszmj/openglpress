@@ -49,7 +49,7 @@ void run()
 
     while(!window.shouldClose())
     {
-        window.processInput();
+        window.processInputAndGetTimeDiff();
         window.clearColor(0.1f, 0.1f, 0.1f, 0.0f);
         scene.render(window);
         window.swapBuffers();

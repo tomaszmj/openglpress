@@ -8,7 +8,7 @@ class Window
 {
 public:
     Window(const char *title, int width, int height);
-    void processInput();
+    double processInputAndGetTimeDiff();
     bool shouldClose();
     void swapBuffers();
     void clearColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
@@ -18,6 +18,7 @@ private:
     GLFWwindow *glfwWindow;
     Camera camera;
     glm::mat4 projectionMatrix;
+    double lastEventTime;
 
     static void framebufferSizeCallback(GLFWwindow *glfw_window, int width, int height);
 };

@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 Window::Window(const char *title, int width, int height)
-    : glfwWindow(glfwCreateWindow(width, height, title, nullptr, nullptr))
+    : glfwWindow(glfwCreateWindow(width, height, title, nullptr, nullptr)), lastEventTime(-1.0)
 {
     if(glfwWindow == nullptr)
         throw std::runtime_error("GLFW window not created");
@@ -15,48 +15,54 @@ Window::Window(const char *title, int width, int height)
     framebufferSizeCallback(glfwWindow, width, height);
 }
 
-void Window::processInput()
+double Window::processInputAndGetTimeDiff()
 {
-    constexpr float camera_move_side_constant = 0.01f;
-    constexpr float camera_move_forward_constant = 0.02f;
-    constexpr float camera_rotate_constant = 0.05f;
+    constexpr double camera_move_side_constant = 1.0;
+    constexpr double camera_move_forward_constant = 2.0;
+    constexpr double camera_rotate_constant = 0.5;
 
+    if(lastEventTime < 0.0)
+        lastEventTime = glfwGetTime();
     glfwPollEvents();
+    double delta_time = glfwGetTime() - lastEventTime; // in first function call it will be ~0, then it will work properly
+    lastEventTime = glfwGetTime();
 
     if(glfwGetKey(glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(glfwWindow, true);
     if(glfwGetKey(glfwWindow, GLFW_KEY_UP) == GLFW_PRESS)
     {
         if(glfwGetKey(glfwWindow, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            camera.rotate(camera_rotate_constant, Camera::ROTATE_UP);
+            camera.rotate(static_cast<float>(camera_rotate_constant * delta_time), Camera::ROTATE_UP);
         else
-            camera.move(camera_move_side_constant, Camera::UP);
+            camera.move(static_cast<float>(camera_move_side_constant * delta_time), Camera::UP);
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
         if(glfwGetKey(glfwWindow, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            camera.rotate(camera_rotate_constant, Camera::ROTATE_DOWN);
+            camera.rotate(static_cast<float>(camera_rotate_constant * delta_time), Camera::ROTATE_DOWN);
         else
-            camera.move(camera_move_side_constant, Camera::DOWN);
+            camera.move(static_cast<float>(camera_move_side_constant * delta_time), Camera::DOWN);
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
         if(glfwGetKey(glfwWindow, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            camera.rotate(camera_rotate_constant, Camera::ROTATE_RIGHT);
+            camera.rotate(static_cast<float>(camera_rotate_constant * delta_time), Camera::ROTATE_RIGHT);
         else
-            camera.move(camera_move_side_constant, Camera::RIGHT);
+            camera.move(static_cast<float>(camera_move_side_constant * delta_time), Camera::RIGHT);
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
         if(glfwGetKey(glfwWindow, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            camera.rotate(camera_rotate_constant, Camera::ROTATE_LEFT);
+            camera.rotate(static_cast<float>(camera_rotate_constant * delta_time), Camera::ROTATE_LEFT);
         else
-            camera.move(camera_move_side_constant, Camera::LEFT);
+            camera.move(static_cast<float>(camera_move_side_constant * delta_time), Camera::LEFT);
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
-        camera.move(camera_move_forward_constant, Camera::BACKWARD);
+        camera.move(static_cast<float>(camera_move_forward_constant * delta_time), Camera::BACKWARD);
     if(glfwGetKey(glfwWindow, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
-        camera.move(camera_move_forward_constant, Camera::FORWARD);
+        camera.move(static_cast<float>(camera_move_forward_constant * delta_time), Camera::FORWARD);
+
+    return delta_time;
 }
 
 bool Window::shouldClose()
