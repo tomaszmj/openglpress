@@ -13,6 +13,7 @@
 #include <VAOWrapper.h>
 #include <RenderedObject.h>
 #include <Window.h>
+#include <Scene.h>
 
 void run()
 {
@@ -36,13 +37,13 @@ void run()
     glm::mat4 background_model_matrix = glm::scale(glm::mat4(1), glm::vec3(30.0f, 30.0f, 30.0f));
     background_model_matrix = glm::translate(background_model_matrix, glm::vec3(0.0f, 0.5f, 0.0f));
 
-    std::vector<RenderedObject> rendered_objects({
-        RenderedObject(wood_shader, vao_wrapper_cube_inside, background_model_matrix, textures[0]),
-        RenderedObject(metal_shader, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(1.5f, 1.5f, 2.0f)), textures[1]),
-        RenderedObject(metal_shader, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(2.1f, 3.0f, 4.0f)), textures[1]),
-        RenderedObject(metal_shader, vao_wrapper_cylinder, glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.5f, 0.0f)), textures[1]),
-        RenderedObject(light_source_shader, vao_wrapper_simple_cube, glm::translate(glm::mat4(1), glm::vec3(14.49f, 29.49f, 14.49f)), textures[-1]),
-    });
+    Scene scene;
+    scene.setUpLightSource(glm::vec3(14.49f, 29.49f, 14.49f), glm::vec3(1.0));
+    scene.makeAndAddObject(light_source_shader, vao_wrapper_simple_cube, glm::translate(glm::mat4(1), glm::vec3(14.49f, 29.49f, 14.49f)), textures[-1]);
+    scene.makeAndAddObject(wood_shader, vao_wrapper_cube_inside, background_model_matrix, textures[0]);
+    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(1.5f, 1.5f, 2.0f)), textures[1]);
+    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, glm::translate(glm::mat4(1), glm::vec3(2.1f, 3.0f, 4.0f)), textures[1]);
+    scene.makeAndAddObject(metal_shader, vao_wrapper_cylinder, glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.5f, 0.0f)), textures[1]);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -50,8 +51,7 @@ void run()
     {
         window.processInput();
         window.clearColor(0.1f, 0.1f, 0.1f, 0.0f);
-        for(const RenderedObject &rendered_object: rendered_objects)
-            rendered_object.render(window.getTransfromMatrix());
+        scene.render(window);
         window.swapBuffers();
     }
 }

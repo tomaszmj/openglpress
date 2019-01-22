@@ -9,15 +9,35 @@ RenderedObject::RenderedObject(const ShaderProgram &shader_program, const VAOWra
     : modelMatrix(model_matrix), shaderProgram(shader_program), vaoWrapper(vao_wrapper), texture(texture)
 { }
 
-void RenderedObject::render(const glm::mat4 &view_projection_matrix) const
+void RenderedObject::prepareRender() const
 {
     shaderProgram.use();
     vaoWrapper.bind();
     texture.bind(shaderProgram.getId(), "Texture");
-    shaderProgram.setMat4Uniform("transform", view_projection_matrix * modelMatrix);
     shaderProgram.setMat4Uniform("model", modelMatrix);
-    shaderProgram.setVec3Uniform("lightColor", glm::vec3(1.0, 1.0, 1.0));
-    shaderProgram.setVec3Uniform("lightPosition", glm::vec3(14.0f, 29.0f, 14.0f));
+}
+
+void RenderedObject::render() const
+{
     glDrawElements(GL_TRIANGLES, vaoWrapper.getNumberOfVertices(), GL_UNSIGNED_INT, nullptr);
+}
+
+void RenderedObject::endRender() const
+{
     vaoWrapper.unbind();
+}
+
+const ShaderProgram &RenderedObject::getShaderProgram() const
+{
+    return shaderProgram;
+}
+
+const VAOWrapper &RenderedObject::getVaoWrapper() const
+{
+    return vaoWrapper;
+}
+
+const Texture &RenderedObject::getTexture() const
+{
+    return texture;
 }
