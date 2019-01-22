@@ -50,6 +50,11 @@ const glm::mat4 &Camera::getViewMatrix() const
     return viewMatrix;
 }
 
+const glm::vec3 &Camera::getPosition() const
+{
+    return position;
+}
+
 glm::vec3 Camera::cameraX() const
 {
     return glm::cross(up, cameraZ);

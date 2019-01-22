@@ -6,15 +6,21 @@ out vec4 color;
 
 uniform vec3 lightColor;
 uniform vec3 lightPosition;
+uniform vec3 cameraPosition;
 
 uniform sampler2D Texture;
 
 void main()
 {
+    vec3 normal = normalize(transformedNormal);
+    vec3 directionToObserver = normalize(cameraPosition - transformedPosition);
     vec3 directionToLight = normalize(lightPosition - transformedPosition);
-    float diffuseCoefficient = max(dot(normalize(transformedNormal), directionToLight), 0.0);
-    float diffuse = 0.9 * diffuseCoefficient;
-    float ambient = 0.1;
+    vec3 reflectedLightDirection = reflect(-directionToLight, normal);
+
+    float specularCoefficient = pow(max(dot(directionToObserver, reflectedLightDirection), 0.0), 16);
+    float diffuseCoefficient = max(dot(normal, directionToLight), 0.0);
+    float ambientCoefficient = 0.1;
+
     vec4 ownColor = texture(Texture, textureCoordinates);
-    color = (diffuse + ambient) * vec4(lightColor, 1.0) * ownColor;
+    color = (ambientCoefficient + diffuseCoefficient + specularCoefficient) * vec4(lightColor, 1.0) * ownColor;
 }

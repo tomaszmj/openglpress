@@ -88,6 +88,11 @@ const glm::mat4 &Window::getTransfromMatrix() const
     return transform;
 }
 
+const Camera &Window::getCamera() const
+{
+    return camera;
+}
+
 void Window::framebufferSizeCallback(GLFWwindow* glfw_window, int width, int height)
 {
     glViewport(0, 0, width, height);

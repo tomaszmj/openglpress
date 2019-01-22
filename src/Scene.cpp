@@ -17,6 +17,7 @@ void Scene::render(const Window &window) const
         program.setMat4Uniform("transform", window.getTransfromMatrix() * object->modelMatrix);
         program.setVec3Uniform("lightColor", lightColor);
         program.setVec3Uniform("lightPosition", lightPosition);
+        program.setVec3Uniform("cameraPosition", window.getCamera().getPosition());
         object->render();
         object->endRender();
     }
