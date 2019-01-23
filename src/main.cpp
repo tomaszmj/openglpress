@@ -16,6 +16,13 @@
 #include <Scene.h>
 #include <ModelMatrix.h>
 
+// This program a priori uses only C++11, so std::make_unique may not be supported.
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
 void run()
 {
     Window window("gkom press", 800, 600);
@@ -50,12 +57,12 @@ void run()
 
     Scene scene;
     scene.setUpLightSource(glm::vec3(14.49f, 29.49f, 14.49f), glm::vec3(1.0));
-    scene.makeAndAddObject(light_source_shader, vao_wrapper_simple_cube, light_source, textures[-1]);
-    scene.makeAndAddObject(wood_shader, vao_wrapper_cube_inside, background, textures[0]);
-    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, press_base_cube, textures[1]);
-    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, press_back, textures[1]);
-    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, press_top, textures[1]);
-    scene.makeAndAddObject(metal_shader, vao_wrapper_cylinder, press_base_cylinder, textures[1]);
+    scene.addObject(make_unique<RenderedObject>(light_source_shader, vao_wrapper_simple_cube, light_source, textures[-1]));
+    scene.addObject(make_unique<RenderedObject>(wood_shader, vao_wrapper_cube_inside, background, textures[0]));
+    scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cube, press_base_cube, textures[1]));
+    scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cube, press_back, textures[1]));
+    scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cube, press_top, textures[1]));
+    scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cylinder, press_base_cylinder, textures[1]));
 
     glEnable(GL_DEPTH_TEST);
 

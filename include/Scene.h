@@ -17,7 +17,6 @@ public:
     void render(const Window &window) const;
 //    void update(time)
     void addObject(std::unique_ptr<RenderedObject> object);
-    void makeAndAddObject(const ShaderProgram &shader, const VAOWrapper &vao, ModelMatrix &model, const Texture &texture);
     void setUpLightSource(const glm::vec3 &position, const glm::vec3 &color);
 
 private:

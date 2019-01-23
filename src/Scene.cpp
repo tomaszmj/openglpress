@@ -29,11 +29,6 @@ void Scene::addObject(std::unique_ptr<RenderedObject> object)
     renderedObjects.emplace_back(std::move(object));
 }
 
-void Scene::makeAndAddObject(const ShaderProgram &shader, const VAOWrapper &vao, ModelMatrix &model, const Texture &texture)
-{
-    renderedObjects.emplace_back(new RenderedObject(shader, vao, model, texture));
-}
-
 void Scene::setUpLightSource(const glm::vec3 &position, const glm::vec3 &color)
 {
     lightPosition = position;
