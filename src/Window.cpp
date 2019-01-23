@@ -24,8 +24,9 @@ void Window::processInput()
     if(lastEventTime < 0.0)
         lastEventTime = glfwGetTime();
     glfwPollEvents();
-    lastDeltaTime = glfwGetTime() - lastEventTime; // in first function call it will be ~0, then it will work properly
-    lastEventTime = glfwGetTime();
+    double current_time = glfwGetTime();
+    lastDeltaTime = current_time - lastEventTime; // in first function call it will be ~0, then it will work properly
+    lastEventTime = current_time;
 
     if(glfwGetKey(glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(glfwWindow, true);

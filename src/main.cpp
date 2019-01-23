@@ -59,7 +59,7 @@ void run()
     press_piston.setScale(glm::vec3(0.6f, 3.0f, 0.6f));
     press_piston.setTranslation(glm::vec3(0.0f, 2.4f, 0.0f));
 
-    std::array<double, 6> animation_times = {1, 2, 3, 4, 5, 6};
+    std::array<double, 6> animation_times = {1, 2, 10, 11, 12, 13};
     std::array<double, 3> piston_heights = {1.5, 1.2, 1.0};
     AnimationParameters animation_parameters(animation_times, piston_heights);
     std::unique_ptr<RenderedObject> piston(new Piston(
@@ -94,12 +94,20 @@ void testAnimationParameters()
     std::array<double, 3> heights = {10, 5, 4};
     AnimationParameters p(times, heights);
     std::cout << p.maxVelocityBeforeCrushing << std::endl;
-    const auto &q = p.quadraticVelocityCoefficientsBeforeCrushing;
-    std::cout << q[0] << " " << q[1] << " " << q[2] << std::endl;
+    const auto &q1 = p.quadraticVelocityCoefficientsBeforeCrushing;
+    std::cout << q1[0] << " " << q1[1] << " " << q1[2] << std::endl;
+    const auto &q2 = p.quadraticVelocityCoefficientsAfterCrushing;
+    std::cout << q2[0] << " " << q2[1] << " " << q2[2] << std::endl;
+    assert(std::fabs(p.calculateY(p.t[0]) - p.h[0]) < std::numeric_limits<double>::epsilon());
     assert(std::fabs(p.calculateY(p.t[1]) - p.h[1]) < std::numeric_limits<double>::epsilon());
     assert(std::fabs(p.calculateY(p.t[1] - 0.00000001) - p.h[1]) < 0.01);
     assert(std::fabs(p.calculateY(p.t[2]) - p.h[2]) < std::numeric_limits<double>::epsilon());
     assert(std::fabs(p.calculateY(p.t[2] - 0.00000001) - p.h[2]) < 0.01);
+    assert(std::fabs(p.calculateY(p.t[3]) - p.h[2]) < std::numeric_limits<double>::epsilon());
+    assert(std::fabs(p.calculateY(p.t[4] - 0.00000001) - p.h[1]) < 0.01);
+    assert(std::fabs(p.calculateY(p.t[4]) - p.h[1]) < std::numeric_limits<double>::epsilon());
+    assert(std::fabs(p.calculateY(p.t[4] - 0.00000001) - p.h[1]) < 0.01);
+    assert(std::fabs(p.calculateY(p.t[5]) - p.h[0]) < std::numeric_limits<double>::epsilon());
 //    std::exit(0);
 }
 
