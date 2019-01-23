@@ -2,6 +2,7 @@
 #include <ShaderProgram.h>
 #include <Window.h>
 #include <Textures.h>
+#include <ModelMatrix.h>
 #include <VAOWrapper.h>
 
 Scene::Scene()
@@ -14,7 +15,7 @@ void Scene::render(const Window &window) const
     {
         object->prepareRender();
         const ShaderProgram &program = object->getShaderProgram();
-        program.setMat4Uniform("transform", window.getTransfromMatrix() * object->modelMatrix);
+        program.setMat4Uniform("transform", window.getTransfromMatrix() * object->getModelMatrix().get());
         program.setVec3Uniform("lightColor", lightColor);
         program.setVec3Uniform("lightPosition", lightPosition);
         program.setVec3Uniform("cameraPosition", window.getCamera().getPosition());
@@ -28,7 +29,7 @@ void Scene::addObject(std::unique_ptr<RenderedObject> object)
     renderedObjects.emplace_back(std::move(object));
 }
 
-void Scene::makeAndAddObject(const ShaderProgram &shader, const VAOWrapper &vao, const glm::mat4 &model, const Texture &texture)
+void Scene::makeAndAddObject(const ShaderProgram &shader, const VAOWrapper &vao, ModelMatrix &model, const Texture &texture)
 {
     renderedObjects.emplace_back(new RenderedObject(shader, vao, model, texture));
 }

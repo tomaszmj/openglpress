@@ -1,20 +1,26 @@
 #include <RenderedObject.h>
 #include <ShaderProgram.h>
 #include <VAOWrapper.h>
+#include <ModelMatrix.h>
 #include <Textures.h>
 #include <glm/gtc/type_ptr.hpp>
 
 RenderedObject::RenderedObject(const ShaderProgram &shader_program, const VAOWrapper &vao_wrapper,
-                               glm::mat4 model_matrix, const Texture &texture)
-    : modelMatrix(model_matrix), shaderProgram(shader_program), vaoWrapper(vao_wrapper), texture(texture)
+                               ModelMatrix &model_matrix, const Texture &texture)
+    : shaderProgram(shader_program), vaoWrapper(vao_wrapper), modelMatrix(model_matrix), texture(texture)
 { }
+
+RenderedObject::~RenderedObject()
+{
+
+}
 
 void RenderedObject::prepareRender() const
 {
     shaderProgram.use();
     vaoWrapper.bind();
     texture.bind(shaderProgram.getId(), "Texture");
-    shaderProgram.setMat4Uniform("model", modelMatrix);
+    shaderProgram.setMat4Uniform("model", modelMatrix.get());
 }
 
 void RenderedObject::render() const
@@ -27,6 +33,21 @@ void RenderedObject::endRender() const
     vaoWrapper.unbind();
 }
 
+void RenderedObject::startAnimation()
+{
+
+}
+
+void RenderedObject::animationStep(double)
+{
+
+}
+
+void RenderedObject::stopAnimation()
+{
+
+}
+
 const ShaderProgram &RenderedObject::getShaderProgram() const
 {
     return shaderProgram;
@@ -35,6 +56,11 @@ const ShaderProgram &RenderedObject::getShaderProgram() const
 const VAOWrapper &RenderedObject::getVaoWrapper() const
 {
     return vaoWrapper;
+}
+
+const ModelMatrix &RenderedObject::getModelMatrix() const
+{
+    return modelMatrix;
 }
 
 const Texture &RenderedObject::getTexture() const

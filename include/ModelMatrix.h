@@ -1,14 +1,10 @@
 #pragma once
 #include <glm/glm.hpp>
 
-class ModelMatrixBase
+class ModelMatrix
 {
 public:
-    ModelMatrixBase();
-    virtual ~ModelMatrixBase();
-    virtual void startAnimation();
-    virtual void animationStep(double time_diff);
-    virtual void stopAnimation();
+    ModelMatrix();
     const glm::mat4 &get() const;
     const glm::mat4 &getTranslation() const;
     const glm::mat4 &getRotation() const;

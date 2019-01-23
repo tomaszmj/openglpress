@@ -14,7 +14,7 @@
 #include <RenderedObject.h>
 #include <Window.h>
 #include <Scene.h>
-#include <ModelMatrixBase.h>
+#include <ModelMatrix.h>
 
 void run()
 {
@@ -35,25 +35,27 @@ void run()
     VAOWrapper vao_wrapper_cube_inside((CubeModelInside()));
     VAOWrapper vao_wrapper_cylinder(CylinderModel(1000, 10));
 
-    glm::mat4 background_model_matrix = glm::scale(glm::mat4(1), glm::vec3(30.0f, 30.0f, 30.0f));
-    background_model_matrix = glm::translate(background_model_matrix, glm::vec3(0.0f, 0.5f, 0.0f));
-
-    ModelMatrixBase press_base, press_back, press_top;
-    press_base.setScale(glm::vec3(2.0f, 0.5f, 2.0f));
-    press_base.setTranslation(glm::vec3(0.0f, 0.25f, 0.0f));
-    press_back.setScale(glm::vec3(3.0f, 4.0f, 2.0f));
-    press_back.setTranslation(glm::vec3(-2.5f, 2.0f, 0.0f));
-    press_top.setScale(glm::vec3(2.0f, 1.5f, 2.0f));
-    press_top.setTranslation(glm::vec3(0.0f, 3.25f, 0.0f));
+    ModelMatrix background, light_source, press_base_cube, press_back, press_top, press_base_cylinder;
+    background.setScale(glm::vec3(30.0f, 30.0f, 30.0f));
+    background.setTranslation(glm::vec3(0.0f, 14.9999f, 0.0f));
+    light_source.setTranslation(glm::vec3(14.49f, 29.49f, 14.49f));
+    press_base_cube.setScale(glm::vec3(2.0f, 0.5f, 2.0f));
+    press_base_cube.setTranslation(glm::vec3(0.0f, 0.25f, 0.0f));
+    press_base_cylinder.setScale(glm::vec3(1.5f, 0.25f, 1.5f));
+    press_base_cylinder.setTranslation(glm::vec3(0.0f, 0.625f, 0.0f));
+    press_back.setScale(glm::vec3(3.0f, 2.5f, 2.0f));
+    press_back.setTranslation(glm::vec3(-2.5f, 1.25f, 0.0f));
+    press_top.setScale(glm::vec3(5.0f, 1.5f, 2.0f));
+    press_top.setTranslation(glm::vec3(-1.5f, 3.25f, 0.0f));
 
     Scene scene;
     scene.setUpLightSource(glm::vec3(14.49f, 29.49f, 14.49f), glm::vec3(1.0));
-    scene.makeAndAddObject(light_source_shader, vao_wrapper_simple_cube, glm::translate(glm::mat4(1), glm::vec3(14.49f, 29.49f, 14.49f)), textures[-1]);
-    scene.makeAndAddObject(wood_shader, vao_wrapper_cube_inside, background_model_matrix, textures[0]);
-    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, press_base.get(), textures[1]);
-    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, press_back.get(), textures[1]);
-    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, press_top.get(), textures[1]);
-    scene.makeAndAddObject(metal_shader, vao_wrapper_cylinder, glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.5f, 0.0f)), textures[1]);
+    scene.makeAndAddObject(light_source_shader, vao_wrapper_simple_cube, light_source, textures[-1]);
+    scene.makeAndAddObject(wood_shader, vao_wrapper_cube_inside, background, textures[0]);
+    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, press_base_cube, textures[1]);
+    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, press_back, textures[1]);
+    scene.makeAndAddObject(metal_shader, vao_wrapper_cube, press_top, textures[1]);
+    scene.makeAndAddObject(metal_shader, vao_wrapper_cylinder, press_base_cylinder, textures[1]);
 
     glEnable(GL_DEPTH_TEST);
 
