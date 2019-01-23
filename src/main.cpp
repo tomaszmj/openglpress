@@ -15,6 +15,7 @@
 #include <Window.h>
 #include <Scene.h>
 #include <ModelMatrix.h>
+#include <AnimationParameters.h>
 
 // This program a priori uses only C++11, so std::make_unique may not be supported.
 template<typename T, typename... Args>
@@ -42,7 +43,7 @@ void run()
     VAOWrapper vao_wrapper_cube_inside((CubeModelInside()));
     VAOWrapper vao_wrapper_cylinder(CylinderModel(1000, 10));
 
-    ModelMatrix background, light_source, press_base_cube, press_back, press_top, press_base_cylinder;
+    ModelMatrix background, light_source, press_base_cube, press_back, press_top, press_base_cylinder, press_piston;
     background.setScale(glm::vec3(30.0f, 30.0f, 30.0f));
     background.setTranslation(glm::vec3(0.0f, 14.9999f, 0.0f));
     light_source.setTranslation(glm::vec3(14.49f, 29.49f, 14.49f));
@@ -54,6 +55,8 @@ void run()
     press_back.setTranslation(glm::vec3(-2.5f, 1.25f, 0.0f));
     press_top.setScale(glm::vec3(5.0f, 1.5f, 2.0f));
     press_top.setTranslation(glm::vec3(-1.5f, 3.25f, 0.0f));
+    press_piston.setScale(glm::vec3(0.6f, 3.0f, 0.6f));
+    press_piston.setTranslation(glm::vec3(0.0f, 2.4f, 0.0f));
 
     Scene scene;
     scene.setUpLightSource(glm::vec3(14.49f, 29.49f, 14.49f), glm::vec3(1.0));
@@ -63,6 +66,7 @@ void run()
     scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cube, press_back, textures[1]));
     scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cube, press_top, textures[1]));
     scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cylinder, press_base_cylinder, textures[1]));
+    scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cylinder, press_piston, textures[1]));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -75,8 +79,20 @@ void run()
     }
 }
 
+void test()
+{
+    std::array<double, 6> times = {1,2,3,4,5,6};
+    std::array<double, 3> heights = {10, 5, 4};
+    AnimationParameters p(times, heights);
+    std::cout << p.maxVelocityBeforeCrushing << std::endl;
+    const auto &q = p.quadraticVelocityCoefficientsBeforeCrushing;
+    std::cout << q[0] << " " << q[1] << " " << q[2] << std::endl;
+//    std::exit(0);
+}
+
 int main()
 {
+    test();
     if(glfwInit() != GL_TRUE)
     {
         std::cout << "GLFW initialization failed" << std::endl;
