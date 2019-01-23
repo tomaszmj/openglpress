@@ -25,8 +25,11 @@ struct AnimationParameters
     const std::array<double, 3> h;
     double maxVelocityBeforeCrushing;
     double maxVelocityAfterCrushing;
+    double accelerationBeforeCrushing;
+    double accelerationAfterCrushing;
     std::array<double, 3> quadraticVelocityCoefficientsBeforeCrushing;
     std::array<double, 3> quadraticVelocityCoefficientsAfterCrushing;
 
+    double calculateY(double time) const;
     static std::array<double, 3> solveLinearEquationsSystem(const glm::dmat3 &m, const glm::dvec3 &v);
 };

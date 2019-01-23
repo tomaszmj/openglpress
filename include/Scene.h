@@ -14,8 +14,8 @@ class Scene
 {
 public:
     Scene();
+    void update(const Window &window);
     void render(const Window &window) const;
-//    void update(time)
     void addObject(std::unique_ptr<RenderedObject> object);
     void setUpLightSource(const glm::vec3 &position, const glm::vec3 &color);
 

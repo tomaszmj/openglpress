@@ -8,18 +8,20 @@ class Window
 {
 public:
     Window(const char *title, int width, int height);
-    double processInputAndGetTimeDiff();
+    void processInput();
     bool shouldClose();
     void swapBuffers();
     void clearColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
     const glm::mat4 &getTransfromMatrix() const;
     const Camera &getCamera() const;
+    double getLastFrameTimeDifference() const;
 
 private:
     GLFWwindow *glfwWindow;
     Camera camera;
     glm::mat4 projectionMatrix;
     double lastEventTime;
+    double lastDeltaTime;
 
     static void framebufferSizeCallback(GLFWwindow *glfw_window, int width, int height);
 };

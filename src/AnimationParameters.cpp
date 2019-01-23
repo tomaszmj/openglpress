@@ -7,7 +7,9 @@ AnimationParameters::AnimationParameters(const std::array<double, 6> times, cons
     : t(times), h(heights)
 {
     maxVelocityBeforeCrushing = 2 * (h[0] - h[1]) / (t[1] - t[0]);
+    accelerationBeforeCrushing = maxVelocityBeforeCrushing / (t[1] - t[0]);
     maxVelocityAfterCrushing = 2 * (h[0] - h[1]) / (t[5] - t[4]);
+    accelerationAfterCrushing = maxVelocityAfterCrushing / (t[5] - t[4]);
     glm::dmat3 m(
         glm::dvec3(t[1]*t[1], t[2]*t[2], (std::pow(t[2], 3) - std::pow(t[1], 3))/3.0),
         glm::dvec3(t[1], t[2], (t[2]*t[2] - t[1]*t[1])/2.0),
@@ -17,6 +19,31 @@ AnimationParameters::AnimationParameters(const std::array<double, 6> times, cons
     glm::dvec3 v(maxVelocityBeforeCrushing, 0.0, h[1] - h[2]);
     quadraticVelocityCoefficientsBeforeCrushing = solveLinearEquationsSystem(m, v);
     //quadraticVelocityCoefficientsAfterCrushing - todo
+}
+
+double AnimationParameters::calculateY(double time) const
+{
+    while(time > t[5])
+        time -= t[5];
+    if(time < t[0])
+        return h[0];
+    if(time < t[1])
+        return h[0] - 0.5 * accelerationBeforeCrushing * (time - t[0]) * (time - t[0]);
+    if(time < t[2])
+    {
+        const auto &q = quadraticVelocityCoefficientsBeforeCrushing;
+        double delta_y =
+            q[0] * (std::pow(time, 3) - std::pow(t[1], 3)) / 3.0 +
+            q[1] * (time * time - t[1] * t[1]) / 2.0 +
+            q[2] * (time - t[1]);
+        return h[1] - delta_y;
+    }
+    if(time < t[3])
+        return h[2];
+    if(time < t[4])
+        return h[2]; // unimplemented yet
+    // else - if time <= t[5]
+    return h[2]; // unimplemented yet
 }
 
 std::array<double, 3> AnimationParameters::solveLinearEquationsSystem(const glm::dmat3 &m, const glm::dvec3 &v)

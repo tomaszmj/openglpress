@@ -1,6 +1,7 @@
 #pragma once
 #include <RenderedObject.h>
 #include <glm/glm.hpp>
+#include <ModelMatrix.h>
 
 class ShaderProgram;
 class VAOWrapper;
@@ -16,4 +17,12 @@ public:
     virtual void startAnimation() override;
     virtual void animationStep(double time_diff) override;
     virtual void stopAnimation() override;
+
+protected:
+    ModelMatrix modelMatrix;
+    const AnimationParameters &animationParameters;
+    double animationTime;
+    const glm::vec3 scale;
+
+    void updateTranslation(float lower_base_y);
 };

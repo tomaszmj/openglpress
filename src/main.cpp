@@ -16,6 +16,7 @@
 #include <Scene.h>
 #include <ModelMatrix.h>
 #include <AnimationParameters.h>
+#include <Piston.h>
 
 // This program a priori uses only C++11, so std::make_unique may not be supported.
 template<typename T, typename... Args>
@@ -58,6 +59,12 @@ void run()
     press_piston.setScale(glm::vec3(0.6f, 3.0f, 0.6f));
     press_piston.setTranslation(glm::vec3(0.0f, 2.4f, 0.0f));
 
+    std::array<double, 6> animation_times = {1, 2, 3, 4, 5, 6};
+    std::array<double, 3> piston_heights = {1.5, 1.2, 1.0};
+    AnimationParameters animation_parameters(animation_times, piston_heights);
+    std::unique_ptr<RenderedObject> piston(new Piston(
+        metal_shader, vao_wrapper_cylinder, textures[1], glm::vec3(0.6f, 2.0f, 0.6f), animation_parameters));
+
     Scene scene;
     scene.setUpLightSource(glm::vec3(14.49f, 29.49f, 14.49f), glm::vec3(1.0));
     scene.addObject(make_unique<RenderedObject>(light_source_shader, vao_wrapper_simple_cube, light_source, textures[-1]));
@@ -66,20 +73,22 @@ void run()
     scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cube, press_back, textures[1]));
     scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cube, press_top, textures[1]));
     scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cylinder, press_base_cylinder, textures[1]));
-    scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cylinder, press_piston, textures[1]));
+    scene.addObject(std::move(piston));
 
     glEnable(GL_DEPTH_TEST);
 
     while(!window.shouldClose())
     {
-        window.processInputAndGetTimeDiff();
+        window.processInput();
+        scene.update(window);
         window.clearColor(0.1f, 0.1f, 0.1f, 0.0f);
         scene.render(window);
         window.swapBuffers();
     }
 }
 
-void test()
+#include <limits>
+void testAnimationParameters()
 {
     std::array<double, 6> times = {1,2,3,4,5,6};
     std::array<double, 3> heights = {10, 5, 4};
@@ -87,12 +96,16 @@ void test()
     std::cout << p.maxVelocityBeforeCrushing << std::endl;
     const auto &q = p.quadraticVelocityCoefficientsBeforeCrushing;
     std::cout << q[0] << " " << q[1] << " " << q[2] << std::endl;
+    assert(std::fabs(p.calculateY(p.t[1]) - p.h[1]) < std::numeric_limits<double>::epsilon());
+    assert(std::fabs(p.calculateY(p.t[1] - 0.00000001) - p.h[1]) < 0.01);
+    assert(std::fabs(p.calculateY(p.t[2]) - p.h[2]) < std::numeric_limits<double>::epsilon());
+    assert(std::fabs(p.calculateY(p.t[2] - 0.00000001) - p.h[2]) < 0.01);
 //    std::exit(0);
 }
 
 int main()
 {
-    test();
+    testAnimationParameters();
     if(glfwInit() != GL_TRUE)
     {
         std::cout << "GLFW initialization failed" << std::endl;
