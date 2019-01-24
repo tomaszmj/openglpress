@@ -59,9 +59,7 @@ void run()
     press_piston.setScale(glm::vec3(0.6f, 3.0f, 0.6f));
     press_piston.setTranslation(glm::vec3(0.0f, 2.4f, 0.0f));
 
-    std::array<double, 4> animation_times = {1, 2, 3, 4};
-    std::array<double, 3> piston_heights = {1.4, 1.2, 1.0};
-    AnimationParameters animation_parameters(animation_times, piston_heights);
+    AnimationParameters animation_parameters({1, 2, 3, 4}, {1.4, 1.2, 1.0});
     std::unique_ptr<RenderedObject> piston(new Piston(
         metal_shader, vao_wrapper_cylinder, textures[1], glm::vec3(0.6f, 2.0f, 0.6f), animation_parameters));
 
@@ -87,12 +85,11 @@ void run()
     }
 }
 
+#ifndef NDEBUG
 #include <limits>
 void testAnimationParameters()
 {
-    std::array<double, 4> times = {1,2,3,4};
-    std::array<double, 3> heights = {10, 5, 4};
-    AnimationParameters p(times, heights);
+    AnimationParameters p({1,2,3,4}, {10, 5, 4});
     std::cout << p.maxVelocityBeforeCrushing << " " << p.maxVelocityAfterCrushing << std::endl;
     assert(std::fabs(p.calculateY(p.t[0]) - p.h[0]) < std::numeric_limits<double>::epsilon());
     assert(std::fabs(p.calculateY(p.t[1] - 0.00000001) - p.h[1]) < 0.01);
@@ -105,10 +102,13 @@ void testAnimationParameters()
     assert(std::fabs(p.calculateY(p.t[5]) - p.h[0]) < std::numeric_limits<double>::epsilon());
 //    std::exit(0);
 }
+#endif
 
 int main()
 {
+#ifndef NDEBUG
     testAnimationParameters();
+#endif
     if(glfwInit() != GL_TRUE)
     {
         std::cout << "GLFW initialization failed" << std::endl;

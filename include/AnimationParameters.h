@@ -26,5 +26,4 @@ struct AnimationParameters
     double maxVelocityAfterCrushing;
 
     double calculateY(double time) const;
-    static std::array<double, 3> solveLinearEquationsSystem(const glm::dmat3 &m, const glm::dvec3 &v);
 };

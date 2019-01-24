@@ -23,7 +23,6 @@ protected:
     const AnimationParameters &animationParameters;
     double animationTime;
     const glm::vec3 scale;
-    double lastY;
 
     void updateTranslation(float lower_base_y);
 };

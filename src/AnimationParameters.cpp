@@ -43,14 +43,3 @@ double AnimationParameters::calculateY(double time) const
     double v = maxVelocityAfterCrushing * (t[5] - time) / (t[5] - t[4]);
     return h[1] + 0.5 * (v + maxVelocityAfterCrushing) * (time - t[4]);
 }
-
-std::array<double, 3> AnimationParameters::solveLinearEquationsSystem(const glm::dmat3 &m, const glm::dvec3 &v)
-{
-    std::array<double, 3> retval;
-    double main_determinant = glm::determinant(m);
-    assert(main_determinant != 0.0);
-    retval[0] = glm::determinant(glm::dmat3(v, glm::column(m, 1), glm::column(m, 2))) / main_determinant;
-    retval[1] = glm::determinant(glm::dmat3(glm::column(m, 0), v, glm::column(m, 2))) / main_determinant;
-    retval[2] = glm::determinant(glm::dmat3(glm::column(m, 0), glm::column(m, 1), v)) / main_determinant;
-    return retval;
-}
