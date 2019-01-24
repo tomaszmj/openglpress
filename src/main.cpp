@@ -45,7 +45,7 @@ void run()
     VAOWrapper vao_wrapper_cube_inside((CubeModelInside()));
     VAOWrapper vao_wrapper_cylinder(CylinderModel(1000, 10));
 
-    ModelMatrix background, light_source, press_base_cube, press_back, press_top, press_base_cylinder, press_piston;
+    ModelMatrix background, light_source, press_base_cube, press_back, press_top, press_base_cylinder;
     background.setScale(glm::vec3(30.0f, 30.0f, 30.0f));
     background.setTranslation(glm::vec3(0.0f, 14.9999f, 0.0f));
     light_source.setTranslation(glm::vec3(14.49f, 29.49f, 14.49f));
@@ -57,8 +57,6 @@ void run()
     press_back.setTranslation(glm::vec3(-2.5f, 1.25f, 0.0f));
     press_top.setScale(glm::vec3(5.0f, 1.5f, 2.0f));
     press_top.setTranslation(glm::vec3(-1.5f, 3.25f, 0.0f));
-    press_piston.setScale(glm::vec3(0.6f, 3.0f, 0.6f));
-    press_piston.setTranslation(glm::vec3(0.0f, 2.4f, 0.0f));
 
     AnimationParameters animation_parameters({1, 4, 5, 7}, {1.9, 1.7, 1.2});
     std::unique_ptr<RenderedObject> piston(new Piston(metal_shader, vao_wrapper_cylinder,

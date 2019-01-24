@@ -7,7 +7,7 @@ public:
     enum MoveDirection {RIGHT, LEFT, UP, DOWN, BACKWARD, FORWARD};
     enum RotationDirection {ROTATE_UP, ROTATE_DOWN, ROTATE_RIGHT, ROTATE_LEFT};
 
-    Camera(glm::vec3 eye=glm::vec3(6.0f, 6.0f, -6.0f), glm::vec3 lookingAt=glm::vec3(0.5f));
+    Camera(glm::vec3 eye=glm::vec3(2.2f, 4.9f, -7.0f), glm::vec3 lookingAt=glm::vec3(1.8f, 4.5f, -6.2f));
     const glm::mat4 &getViewMatrix() const;
     const glm::vec3 &getPosition() const;
     void move(glm::f32 distance, MoveDirection direction);
