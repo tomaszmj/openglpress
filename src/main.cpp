@@ -88,30 +88,8 @@ void run()
     }
 }
 
-#ifndef NDEBUG
-#include <limits>
-void testAnimationParameters()
-{
-    AnimationParameters p({1,2,3,4}, {10, 5, 4});
-    std::cout << p.maxVelocityBeforeCrushing << " " << p.maxVelocityAfterCrushing << std::endl;
-    assert(std::fabs(p.calculateY(p.t[0]) - p.h[0]) < std::numeric_limits<double>::epsilon());
-    assert(std::fabs(p.calculateY(p.t[1] - 0.00000001) - p.h[1]) < 0.01);
-    assert(std::fabs(p.calculateY(p.t[1]) - p.h[1]) < std::numeric_limits<double>::epsilon());
-    assert(std::fabs(p.calculateY(p.t[2] - 0.00000001) - p.h[2]) < 0.01);
-    assert(std::fabs(p.calculateY(p.t[2]) - p.h[2]) < std::numeric_limits<double>::epsilon());
-    assert(std::fabs(p.calculateY(p.t[3]) - p.h[2]) < std::numeric_limits<double>::epsilon());
-    assert(std::fabs(p.calculateY(p.t[4] - 0.00000001) - p.h[1]) < 0.01);
-    assert(std::fabs(p.calculateY(p.t[4]) - p.h[1]) < std::numeric_limits<double>::epsilon());
-    assert(std::fabs(p.calculateY(p.t[5]) - p.h[0]) < std::numeric_limits<double>::epsilon());
-//    std::exit(0);
-}
-#endif
-
 int main()
 {
-#ifndef NDEBUG
-    testAnimationParameters();
-#endif
     if(glfwInit() != GL_TRUE)
     {
         std::cout << "GLFW initialization failed" << std::endl;

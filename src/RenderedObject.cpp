@@ -33,17 +33,7 @@ void RenderedObject::endRender() const
     vaoWrapper.unbind();
 }
 
-void RenderedObject::startAnimation()
-{
-
-}
-
 void RenderedObject::animationStep(double)
-{
-
-}
-
-void RenderedObject::stopAnimation()
 {
 
 }

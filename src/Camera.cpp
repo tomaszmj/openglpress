@@ -1,9 +1,6 @@
 #include <Camera.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_access.hpp>
-#ifndef NDEBUG
-#include <iostream>
-#endif
 
 namespace
 {
@@ -75,12 +72,7 @@ void Camera::rotateUpOrDown(glm::f32 coefficient)
 {
     glm::vec3 new_camera_z = rotate_vector(cameraZ, coefficient, cameraX());
     if(!isCameraOrientationCorrect(up, cameraX(), new_camera_z))
-    {
-        #ifndef NDEBUG
-        std::cout << "cannot rotate more up/down\n";
-        #endif
         return; // ignore result - do not change camera orientation
-    }
     cameraZ = new_camera_z;
     viewMatrix = glm::lookAt(position, position - cameraZ, up);
 }

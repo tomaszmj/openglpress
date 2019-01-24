@@ -13,8 +13,7 @@ uniform mat4 transform;
 void main()
 {
     gl_Position = transform * vec4(position, 1.0f);
-//    transformedNormal = vec3(model * vec4(normal, 1.0));
-    transformedNormal = normal;
+    transformedNormal = normal; // I do not use rotations nor scales (in cube and cylinder) that would change normal vector
     transformedPosition = vec3(model * vec4(position, 1.0));
     textureCoordinates = textureCoordinatesIn;
 }

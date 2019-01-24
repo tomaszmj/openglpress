@@ -16,9 +16,7 @@ public:
     virtual void prepareRender() const;
     virtual void render() const;
     virtual void endRender() const;
-    virtual void startAnimation();
     virtual void animationStep(double time_diff);
-    virtual void stopAnimation();
     const ShaderProgram &getShaderProgram() const;
     const VAOWrapper &getVaoWrapper() const;
     const ModelMatrix &getModelMatrix() const;

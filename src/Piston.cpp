@@ -3,10 +3,10 @@
 
 Piston::Piston(const ShaderProgram &shader_program, const VAOWrapper &vao_wrapper,
                const Texture &texture, const glm::vec3 &scale, const AnimationParameters &animation_parameters)
-    : RenderedObject(shader_program, vao_wrapper, modelMatrix, texture),
-      modelMatrix(), animationParameters(animation_parameters), animationTime(0.0), scale(scale)
+    : RenderedObject(shader_program, vao_wrapper, modelMatrixInstance, texture),
+      modelMatrixInstance(), animationParameters(animation_parameters), animationTime(0.0), scale(scale)
 {
-    modelMatrix.setScale(scale);
+    modelMatrixInstance.setScale(scale);
     updateTranslation(static_cast<float>(animation_parameters.h[0]));
 }
 
@@ -27,5 +27,5 @@ void Piston::animationStep(double time_diff)
 void Piston::updateTranslation(float lower_base_y)
 {
     float translation_y = scale.y / 2.0f + lower_base_y;
-    modelMatrix.setTranslation(glm::vec3(0.0f, translation_y, 0.0f));
+    modelMatrixInstance.setTranslation(glm::vec3(0.0f, translation_y, 0.0f));
 }

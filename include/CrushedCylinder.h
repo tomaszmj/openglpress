@@ -17,7 +17,7 @@ public:
     virtual void animationStep(double time_diff) override;
 
 protected:
-    ModelMatrix modelMatrix;
+    ModelMatrix modelMatrixInstance;
     const AnimationParameters &animationParameters;
     double animationTime;
     glm::vec3 scale;

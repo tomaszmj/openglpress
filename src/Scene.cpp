@@ -6,7 +6,7 @@
 #include <VAOWrapper.h>
 
 Scene::Scene()
-    : renderedObjects(0), lightPosition(14.0f, 29.0f, 14.0f), lightColor(1.0, 1.0, 1.0)
+    : renderedObjects(0), lightPosition(0.0), lightColor(0.0)
 { }
 
 void Scene::update(const Window &window)
