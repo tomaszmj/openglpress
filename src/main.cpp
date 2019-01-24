@@ -44,7 +44,7 @@ void run()
     VAOWrapper vao_wrapper_simple_cube((SimpleCubeModel()));
     VAOWrapper vao_wrapper_cube((CubeModel()));
     VAOWrapper vao_wrapper_cube_inside((CubeModelInside()));
-    VAOWrapper vao_wrapper_cylinder(CylinderModel(1000, 10));
+    VAOWrapper vao_wrapper_cylinder(CylinderModel(200, 100));
 
     ModelMatrix background, light_source, press_base_cube, press_back, press_top, press_base_cylinder;
     background.setScale(glm::vec3(30.0f, 30.0f, 30.0f));
