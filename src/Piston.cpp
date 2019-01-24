@@ -1,14 +1,4 @@
 #include <Piston.h>
-#include <AnimationParameters.h>
-
-Piston::Piston(const ShaderProgram &shader_program, const VAOWrapper &vao_wrapper,
-               const Texture &texture, const glm::vec3 &scale, const AnimationParameters &animation_parameters)
-    : RenderedObject(shader_program, vao_wrapper, modelMatrixInstance, texture),
-      modelMatrixInstance(), animationParameters(animation_parameters), animationTime(0.0), scale(scale)
-{
-    modelMatrixInstance.setScale(scale);
-    updateTranslation(static_cast<float>(animation_parameters.h[0]));
-}
 
 Piston::~Piston()
 {

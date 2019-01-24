@@ -25,6 +25,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         ${SOIL_INCLUDE_PATH}
         "include"
     )
+    message(STATUS "src ${SRC_LIST}")
+    message(STATUS "src ${HEADER_LIST}")
     set(LIBS ${OPENGL_LIBRARY} ${GLEW_LIBRARY} ${GLFW_LIBRARY} ${SOIL_LIBRARY} legacy_stdio_definitions)
     set (CMAKE_C_FLAGS "-m32")
     set (CMAKE_CXX_FLAGS "-m32")
