@@ -23,7 +23,12 @@ void CrushedCylinder::prepareRender() const
 
 void CrushedCylinder::animationStep(double time_diff)
 {
-
+    animationTime += time_diff;
+    if(animationTime > animationParameters.t[5])
+        animationTime -= animationParameters.t[5];
+    double y = animationParameters.calculateY(animationTime);
+    if(y >= animationParameters.h[2] && y <= animationParameters.h[1])
+        updateParameters(static_cast<float>(y));
 }
 
 void CrushedCylinder::updateParameters(float upper_base_y)

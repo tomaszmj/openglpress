@@ -20,7 +20,7 @@ void Piston::animationStep(double time_diff)
     animationTime += time_diff;
     if(animationTime > animationParameters.t[5])
         animationTime -= animationParameters.t[5];
-    double y = static_cast<double>(animationParameters.calculateY(animationTime));
+    double y = animationParameters.calculateY(animationTime);
     updateTranslation(static_cast<float>(y));
 }
 
