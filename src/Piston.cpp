@@ -15,11 +15,6 @@ Piston::~Piston()
 
 }
 
-void Piston::startAnimation()
-{
-
-}
-
 void Piston::animationStep(double time_diff)
 {
     animationTime += time_diff;
@@ -29,13 +24,8 @@ void Piston::animationStep(double time_diff)
     updateTranslation(static_cast<float>(y));
 }
 
-void Piston::stopAnimation()
-{
-
-}
-
 void Piston::updateTranslation(float lower_base_y)
 {
-    float y = scale.y / 2.0f + lower_base_y;
-    modelMatrix.setTranslation(glm::vec3(0.0, y, 0.0));
+    float translation_y = scale.y / 2.0f + lower_base_y;
+    modelMatrix.setTranslation(glm::vec3(0.0f, translation_y, 0.0f));
 }

@@ -17,6 +17,7 @@
 #include <ModelMatrix.h>
 #include <AnimationParameters.h>
 #include <Piston.h>
+#include <CrushedCylinder.h>
 
 // This program a priori uses only C++11, so std::make_unique may not be supported.
 template<typename T, typename... Args>
@@ -59,9 +60,11 @@ void run()
     press_piston.setScale(glm::vec3(0.6f, 3.0f, 0.6f));
     press_piston.setTranslation(glm::vec3(0.0f, 2.4f, 0.0f));
 
-    AnimationParameters animation_parameters({1, 2, 3, 4}, {1.4, 1.2, 1.0});
-    std::unique_ptr<RenderedObject> piston(new Piston(
-        metal_shader, vao_wrapper_cylinder, textures[1], glm::vec3(0.6f, 2.0f, 0.6f), animation_parameters));
+    AnimationParameters animation_parameters({1, 4, 5, 7}, {1.9, 1.7, 1.2});
+    std::unique_ptr<RenderedObject> piston(new Piston(metal_shader, vao_wrapper_cylinder,
+         textures[1], glm::vec3(1.0f, 2.0f, 1.0f), animation_parameters));
+    std::unique_ptr<RenderedObject> crushed_cylinder(new CrushedCylinder(metal_shader, vao_wrapper_cylinder,
+        textures[1], glm::vec3(0.5f, 0.0f, 0.5f), animation_parameters, 0.75f));
 
     Scene scene;
     scene.setUpLightSource(glm::vec3(14.49f, 29.49f, 14.49f), glm::vec3(1.0));
@@ -72,6 +75,7 @@ void run()
     scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cube, press_top, textures[1]));
     scene.addObject(make_unique<RenderedObject>(metal_shader, vao_wrapper_cylinder, press_base_cylinder, textures[1]));
     scene.addObject(std::move(piston));
+    scene.addObject(std::move(crushed_cylinder));
 
     glEnable(GL_DEPTH_TEST);
 
