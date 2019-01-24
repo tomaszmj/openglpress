@@ -37,6 +37,7 @@ void run()
     ShaderProgram light_source_shader("resources/shaders/light_source.vert", "resources/shaders/light_source.frag");
     ShaderProgram metal_shader("resources/shaders/object.vert", "resources/shaders/metal.frag");
     ShaderProgram wood_shader("resources/shaders/object.vert", "resources/shaders/wood.frag");
+    ShaderProgram crushing_shader("resources/shaders/crushing.vert", "resources/shaders/metal.frag");
 
     Textures textures({"resources/textures/wood.png", "resources/textures/metal.png"});
 
@@ -61,7 +62,7 @@ void run()
     AnimationParameters animation_parameters({1, 4, 5, 7}, {1.9, 1.7, 1.2});
     std::unique_ptr<RenderedObject> piston(new Piston(metal_shader, vao_wrapper_cylinder,
          textures[1], glm::vec3(1.0f, 2.0f, 1.0f), animation_parameters));
-    std::unique_ptr<RenderedObject> crushed_cylinder(new CrushedCylinder(metal_shader, vao_wrapper_cylinder,
+    std::unique_ptr<RenderedObject> crushed_cylinder(new CrushedCylinder(crushing_shader, vao_wrapper_cylinder,
         textures[1], glm::vec3(0.5f, 0.0f, 0.5f), animation_parameters, 0.75f));
 
     Scene scene;

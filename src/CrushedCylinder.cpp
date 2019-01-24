@@ -1,6 +1,7 @@
 #include <CrushedCylinder.h>
 #include <RenderedObject.h>
 #include <AnimationParameters.h>
+#include <ShaderProgram.h>
 
 CrushedCylinder::CrushedCylinder(const ShaderProgram &shader_program, const VAOWrapper &vao_wrapper,
     const Texture &texture, const glm::vec3 &scale,
@@ -19,6 +20,11 @@ CrushedCylinder::~CrushedCylinder()
 void CrushedCylinder::prepareRender() const
 {
     RenderedObject::prepareRender();
+    float crushing_factor = scale.y / (static_cast<float>(animationParameters.h[1]) - lowerBaseY);
+    assert(crushing_factor > 0.0f && crushing_factor <= 1.0f);
+    float rmax = 1.0f / (2.0f * std::sqrt(crushing_factor));
+    shaderProgram.setFloatUniform("crushing_factor", crushing_factor);
+    shaderProgram.setFloatUniform("rmax", rmax);
 }
 
 void CrushedCylinder::animationStep(double time_diff)

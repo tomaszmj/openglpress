@@ -41,6 +41,12 @@ GLint ShaderProgram::getId() const
     return id;
 }
 
+void ShaderProgram::setFloatUniform(const std::string &name, const float value) const
+{
+    GLint location = glGetUniformLocation(id, name.c_str());
+    glUniform1f(location, value);
+}
+
 void ShaderProgram::setVec3Uniform(const std::string &name, const glm::vec3 &value) const
 {
     GLint location = glGetUniformLocation(id, name.c_str());

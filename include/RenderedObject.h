@@ -24,7 +24,7 @@ public:
     const ModelMatrix &getModelMatrix() const;
     const Texture &getTexture() const;
 
-private:
+protected:
     const ShaderProgram &shaderProgram;
     const VAOWrapper &vaoWrapper;
     ModelMatrix &modelMatrix;
